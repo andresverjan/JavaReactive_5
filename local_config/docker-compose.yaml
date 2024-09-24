@@ -1,0 +1,14 @@
+services:
+  database:
+    image: postgres
+    restart: always
+    container_name: "postgres"
+    ports:
+      - "5500:5432"
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      POSTGRES_DATABASE: java_reactivo
+    volumes:
+      - ./init/init.sql:/docker-entrypoint-initdb.d/init.sql
+    command: -p 5500
