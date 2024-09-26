@@ -10,7 +10,7 @@ public class HigherOrderFunction {
     }
 
     public static void main(String[] args) {
-        List<Integer> numbers = List.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+        List<Integer> numbers = List.of(25, 40, 12, 77, 90, 100, 2, 14);
         List<Integer> result = filterPairs(numbers);
         System.out.println("Números pares: " + result);
     }
