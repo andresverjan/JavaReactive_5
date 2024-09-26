@@ -83,9 +83,14 @@ public class Lab1 {
         System.out.println("Función Pura númerosPares: " +oddNumber(numberList));
 
         System.out.print("Función Recursiva: ");
-        for(int number : numberList) {
+        /*for(int number : numberList) {
             System.out.print(factorial(number)+" ");
-        }
+        }*/
+        //functional code
+        numberList.stream()
+                .map(number -> factorial(number))//execute function factorial number by number
+                .forEach(factorial -> System.out.print(factorial + ", "));//show factorial of function
+
         /*al  llamar el metodo filter, a su vez ejecuto la funcion filterEvenNumber, que es un parametro de entrada de
         la funcion filter */
         System.out.println("\nFunción de orden superior: " + filter(numberList,filterEvenNumber));
