@@ -1,9 +1,8 @@
 package com.lab;
 
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class Lab1 {
@@ -54,16 +53,24 @@ public class Lab1 {
      - Retornadas funciones */
 
     //funcion para saber si el numero es par
-    static Function<Integer, Boolean> filterEvenNumber = (num) -> num % 2 == 0;
+    static Predicate<Integer> filterEvenNumber = (num) -> num % 2 == 0;
 
-    public static List<Integer> filter(List<Integer> numbers, Function<Integer, Boolean> filterEvenNumber){
-        List<Integer> evenNumber = new ArrayList<>();
+    /*Programación iterativa
+    public static List<Integer> filter(List<Integer> numbers, Predicate<Integer> filterEvenNumber){
+        List<Integer> evenNumbers = new ArrayList<>();
         for (int num : numbers) {
-            if(filterEvenNumber.apply(num)){
-                evenNumber.add(num);
+            if(filterEvenNumber.test(num)){
+                evenNumbers.add(num);
             }
         }
-        return evenNumber;
+        return evenNumbers;
+    }*/
+
+    //opcion funcional
+    public static List<Integer> filter(List<Integer> numbers, Predicate<Integer> filterEvenNumber) {
+    return numbers.stream()
+                  .filter(filterEvenNumber)
+                  .collect(Collectors.toList());
     }
 
     public static void main(String[] args) {
@@ -79,7 +86,8 @@ public class Lab1 {
         for(int number : numberList) {
             System.out.print(factorial(number)+" ");
         }
-
+        /*al  llamar el metodo filter, a su vez ejecuto la funcion filterEvenNumber, que es un parametro de entrada de
+        la funcion filter */
         System.out.println("\nFunción de orden superior: " + filter(numberList,filterEvenNumber));
     }
 }
