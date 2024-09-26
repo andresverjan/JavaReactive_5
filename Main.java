@@ -6,7 +6,6 @@ import java.util.stream.Collectors;
 public class Main {
     public static void main(String[] args) {
         System.out.println("Hello, world!");
-
         List<Integer> numbers = List.of(1, 2, 3, 4, 5);
         List<Integer> squareList = new Main().forSquareList(numbers);
         List<Integer> ramdomSquareList = new Main().ramdomSquareList(numbers);
@@ -28,7 +27,9 @@ public class Main {
         return result;
     }
     public List<Integer> funtionalSquareList(List<Integer> numbers) {
-        return numbers.stream().map(number -> number * number).collect(Collectors.toList());
+        return numbers.stream()
+                .map(number -> number * number)
+                .collect(Collectors.toList());
     }
     public List<Integer> ramdomSquareList(List<Integer> numbers) {
         List<Integer> result = new ArrayList<>();
@@ -36,10 +37,11 @@ public class Main {
             result.add(number * number);
         }
         Collections.shuffle(result);
+
         return result;
     }
 
-    public static List<Integer> filterOddNumbers(List<Integer> numbers) {
+    public List<Integer> filterOddNumbers(List<Integer> numbers) {
         List<Integer> result = new ArrayList<>();
 
         for (int num : numbers) {
@@ -47,8 +49,12 @@ public class Main {
                 result.add(num);
             }
         }
-
         return result;
+    }
+    public List<Integer> funtionalFilterOddNumbers(List<Integer> numbers) {
+        return numbers.stream()
+                .filter(number -> number % 2 != 0)
+                .collect(Collectors.toList());
     }
     public int factorial(int n) {
         if (n == 0 || n == 1) {
@@ -63,6 +69,4 @@ public class Main {
                 .filter(number -> number % 2 == 0)
                 .collect(Collectors.toList());
     }
-
-
 }
