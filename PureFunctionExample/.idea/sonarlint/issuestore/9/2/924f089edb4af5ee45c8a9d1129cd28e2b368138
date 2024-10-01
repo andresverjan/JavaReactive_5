@@ -1,0 +1,15 @@
+
+Z
+java:S1854"8Remove this useless assignment to local variable "list".(¤Êí…ýÿÿÿÿ8‡ç ô¢2
+K
+java:S1481")Remove this unused "list" local variable.(¤Êí…ýÿÿÿÿ8ˆç ô¢2
+L	java:S106"+Replace this use of System.out by a logger.(Ó›¬œøÿÿÿÿ8ˆç ô¢2
+L
+java:S1481#"*Remove this unused "total" local variable.(óË üÿÿÿÿ8ˆç ô¢2
+X
+java:S1854;";Remove this useless assignment to local variable "numbers".(Øïˆ¯8Šç ô¢2
+I
+java:S1481;",Remove this unused "numbers" local variable.(Øïˆ¯8Šç ô¢2
+X	java:S125>"<This block of commented-out lines of code should be removed.(¤ÌÅº8Šç ô¢2
+X	java:S125D"<This block of commented-out lines of code should be removed.(®ƒø×8Šç ô¢2
+]	java:S125I"<This block of commented-out lines of code should be removed.(Âœª¬ûÿÿÿÿ8Šç ô¢2
