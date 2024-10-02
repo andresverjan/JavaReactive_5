@@ -13,10 +13,16 @@
 .idea/**/.idea
 .idea/**/build
 .idea/**/gradle
-
+/gradle
 # Gradle
 .idea/**/gradle.xml
 .idea/**/libraries
+build.gradle
+build.gradle.kts
+gradlew
+settings.gradle.kts
+settings.gradle
+.gitignore
 
 # Gradle and Maven with auto-import
 # When using Gradle or Maven with auto-import, you should exclude module files,
