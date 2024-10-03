@@ -41,7 +41,8 @@ public class observableExample {
             //muestra que la transaccion se completo ok
             @Override
             public void onComplete() {
-                System.out.println("Completed");
+                System.out.println("Completed" + "\n------------------------------------------");
+
             }
         };
 
@@ -69,7 +70,7 @@ public class observableExample {
 
             @Override
             public void onComplete() {
-                System.out.println("Completed Autoincrement");
+                System.out.println("Completed Autoincrement" + "\n------------------------------------------");
             }
         };
 
@@ -93,7 +94,7 @@ public class observableExample {
 
             @Override
             public void onComplete() {
-                System.out.println("Completed Factorial");
+                System.out.println("Completed Factorial" + "\n------------------------------------------");
             }
         };
 
@@ -118,7 +119,7 @@ public class observableExample {
 
             @Override
             public void onComplete() {
-                System.out.println("Completed square");
+                System.out.println("Completed square" + "\n------------------------------------------");
             }
         };
 
