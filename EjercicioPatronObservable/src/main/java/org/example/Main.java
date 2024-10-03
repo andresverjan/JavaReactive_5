@@ -15,7 +15,7 @@ public class Main {
     }
     public static void main(String[] args) {
 //Observable
-        Observable<Integer> observable = Observable.range(1, 10);
+        Observable<Integer> observable = Observable.range(1, 50);
 //Observer 1
         Observer<Integer> observer1 = new Observer<Integer>() {
             @Override
