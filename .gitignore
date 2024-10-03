@@ -13,7 +13,7 @@
 .idea/**/.idea
 .idea/**/build
 .idea/**/gradle
-/gradle
+/gradle/
 # Gradle
 .idea/**/gradle.xml
 .idea/**/libraries
@@ -23,6 +23,7 @@ gradlew
 settings.gradle.kts
 settings.gradle
 .gitignore
+/gradle/**/wrapper/
 
 # Gradle and Maven with auto-import
 # When using Gradle or Maven with auto-import, you should exclude module files,
@@ -34,15 +35,7 @@ settings.gradle
 # *.iml
 # *.ipr
 
-# CMake
-cmake-build-*/
-
-# Mongo Explorer plugin
-.idea/**/mongoSettings.xml
-
-# File-based project format
-*.iws
-
+#
 # IntelliJ
 out/
 
@@ -55,11 +48,6 @@ atlassian-ide-plugin.xml
 # Cursive Clojure plugin
 .idea/replstate.xml
 
-# Crashlytics plugin (for Android Studio and IntelliJ)
-com_crashlytics_export_strings.xml
-crashlytics.properties
-crashlytics-build.properties
-fabric.properties
 
 # Editor-based Rest Client
 .idea/httpRequests
