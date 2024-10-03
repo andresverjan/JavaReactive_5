@@ -5,8 +5,9 @@ import io.reactivex.disposables.Disposable;
 
 public class ObservableActivityTwo {
     public static void main(String[] args) {
-        Observable<Integer> observable = Observable.range(1, 10);
+        Observable<Integer> observable = Observable.range(1, 50);
 
+        // Observer 1: Incremento de cada número
         Observer<Integer> observer1 = new Observer<Integer>() {
             @Override
             public void onSubscribe(Disposable d) {
@@ -28,7 +29,7 @@ public class ObservableActivityTwo {
                 System.out.println("Observer 1 - Completed");
             }
         };
-        // Observer 2
+        // Observer 2: Factorial de cada número
         Observer<Integer> observer2 = new Observer<Integer>() {
             @Override
             public void onSubscribe(Disposable d) {
@@ -81,7 +82,6 @@ public class ObservableActivityTwo {
             }
         };
 
-        // Suscribir los observers al observable
         observable.subscribe(observer1);
         observable.subscribe(observer2);
         observable.subscribe(observer3);
