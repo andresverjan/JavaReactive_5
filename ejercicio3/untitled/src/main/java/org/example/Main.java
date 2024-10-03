@@ -65,7 +65,7 @@ public class Main {
 
         @Override
         public void onNext(Integer value) {
-            System.out.println("Observer2  Received: "+value+" cuadrado " + value * value);
+            System.out.println("Observer3  Received: "+value+" cuadrado " + value * value);
         }
 
         @Override
