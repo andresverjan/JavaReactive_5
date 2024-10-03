@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class activity1 {
+public class ActivityOne {
 
     public static void main(String[] args) {
 
