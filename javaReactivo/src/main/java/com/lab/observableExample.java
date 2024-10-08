@@ -1,13 +1,9 @@
 package com.lab;
 
-
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class observableExample {
 
