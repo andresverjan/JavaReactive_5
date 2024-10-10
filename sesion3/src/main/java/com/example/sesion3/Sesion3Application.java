@@ -1,10 +1,12 @@
 package com.example.sesion3;
 
+
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+
 
 /**
  *
@@ -16,6 +18,7 @@ public class Sesion3Application {
     public static void main(String[] args) {
         SpringApplication.run(Sesion3Application.class, args);
 
+        observableReactX();
         //Ejemplo clase:
         Observable<Integer> observable = Observable.range(1, 5);
 
@@ -131,5 +134,13 @@ public class Sesion3Application {
 
     private static int square(int number) {
         return number * number;
+    }
+
+    public static String observableReactX() {
+        io.reactivex.rxjava3.core.Observable<String> observable = io.reactivex.rxjava3.core.Observable.just("Hello", "World");
+        observable.subscribe(item -> System.out.println("Received: " + item),
+                error -> System.err.println("Error: " + error),
+                () -> System.out.println("Completed"));
+        return "Observable";
     }
 }
