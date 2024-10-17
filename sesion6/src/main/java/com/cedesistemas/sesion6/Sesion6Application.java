@@ -1,6 +1,7 @@
 package com.cedesistemas.sesion6;
 
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import reactor.core.publisher.Flux;
@@ -12,7 +13,7 @@ import java.util.List;
 
 @SpringBootApplication
 public class Sesion6Application {
-    private static Logger LOGGER = org.slf4j.LoggerFactory.getLogger(Sesion6Application.class);
+    private static Logger LOGGER = LoggerFactory.getLogger(Sesion6Application.class);
 
     static Persona persona1 = new Persona("Juan", "Pérez", "123456789", 30, "Aries");
 
@@ -137,6 +138,7 @@ public class Sesion6Application {
     public static Mono<Persona> eliminarPersona(Persona persona) {
         return Mono.just(persona)
                 .doOnNext(persona1 -> arrayPersons.remove(persona1))
-                .doOnNext(persona1 -> LOGGER.info("Persona eliminada: {}", persona1));
+                .doOnNext(persona1 -> LOGGER.info("Persona eliminada: {}", persona1))
+                .doOnNext(persona1 -> LOGGER.info("Arreglo con la persona eliminada: {}", arrayPersons));
     }
 }
