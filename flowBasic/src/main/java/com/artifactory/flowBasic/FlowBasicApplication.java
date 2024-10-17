@@ -15,6 +15,8 @@ public class FlowBasicApplication {
 
 	private static Flux<List<Persona>> flux;
 
+	private static Mono<List<Persona>> personaMono;
+
 	public static void main(String[] args) {
 
 		SpringApplication.run(FlowBasicApplication.class, args);
@@ -76,7 +78,7 @@ public class FlowBasicApplication {
 						);
 		*/
 		//#4
-		Mono<Persona> personaMono =  Mono.just(persona1);
+		//Mono<Persona> personaMono =  Mono.just(persona1);
 		//#5
 		//personaMono
 		//		.subscribe(p -> System.out.println("Persona1 : " + p.getNombre() + "*"+p.getApellido() ));
@@ -102,30 +104,46 @@ public class FlowBasicApplication {
 						error -> System.err.println("Error: " + error.getMessage()),
 						() -> System.out.println("completada"));
 */
-
-		Disposable resultado = obtenerPersonasPorEdad(38);
-		resultado.isDisposed(n -> System.out.println());
+		//#7
+		//Disposable resultado = obtenerPersonasPorEdad(38);
+		//#8
+		//Disposable resultadoSigno = obtenerPersonasPorSigno("Aries");
+		//resultado.isDisposed(n -> System.out.println());
+		//#9
+		personaMono =  Mono.just(personas);
 
 	}
 
 	public static void print(Persona persona){
 		System.out.println(persona.getNombre() + "-" +persona.getApellido() + "-" + persona.getEdad() + "-" + persona.getTelefono() + "-" + persona.getSigno());
 	}
-
+	//#7
 	public static Disposable obtenerPersonasPorEdad(int edad){
 		return flux.subscribe(p -> p.stream()
 				.filter(per -> per.getEdad() == edad)
 				.collect(Collectors.toList())
 				.stream()
+				.peek(pers->print(pers))
 				.map(per -> per.getNombre()+"#"+per.getApellido()+"#"+per.getEdad()+"#"+per.getTelefono()+"#"+per.getSigno())
 				.forEach(per ->System.out.println(per))
 		);
 	}
-	public static void obtenerPersonasPorSigno(String signo){
+	//#8
+	public static Disposable obtenerPersonasPorSigno(String signo){
+		return flux.subscribe(p -> p.stream()
+				.filter(per -> per.getSigno() == signo)
+				.collect(Collectors.toList())
+				.stream()
+				.peek(pers->print(pers))
+				.map(per -> per.getNombre()+"#"+per.getApellido()+"#"+per.getEdad()+"#"+per.getTelefono()+"#"+per.getSigno())
+				.forEach(per ->System.out.println(per))
+		);
 
 	}
-	public static void obtenerPersonaPorTelefono(String telefono){
+	//#9
+	public static Disposable obtenerPersonaPorTelefono(String telefono){
 		//mono
+		return  personaMono.filter(p->p.stream().)
 	}
 
 }
