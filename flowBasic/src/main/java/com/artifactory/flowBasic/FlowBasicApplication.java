@@ -110,7 +110,9 @@ public class FlowBasicApplication {
 		//Disposable resultadoSigno = obtenerPersonasPorSigno("Aries");
 		//resultado.isDisposed(n -> System.out.println());
 		//#9
-		personaMono =  Mono.just(personas);
+		//personaMono =  Mono.just(personas);
+		//Disposable resultadoTelefono = obtenerPersonaPorTelefono("554433221");
+
 
 	}
 
@@ -143,7 +145,7 @@ public class FlowBasicApplication {
 	//#9
 	public static Disposable obtenerPersonaPorTelefono(String telefono){
 		//mono
-		return  personaMono.filter(p->p.stream().)
+		return personaMono.filter(p->p.contains(telefono)).subscribe();
 	}
 
 }
