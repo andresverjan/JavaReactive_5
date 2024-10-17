@@ -48,8 +48,8 @@ public class ManipulacionFlujosBasico
         List<Persona> personas = load();
         Mono<Persona> personasTelefono= Flux.fromIterable(personas)
                 .filter(persona -> persona.getTelefono().toUpperCase().equals(telefono.toUpperCase()))
-                .single()
-                .doOnError(throwable -> System.out.println("No se encontró el teléfono"));
+                .doOnError(error -> System.out.println("Error al buscar persona on Error"))
+                .singleOrEmpty();
         return personasTelefono;
     };
 
@@ -59,6 +59,7 @@ public class ManipulacionFlujosBasico
         personasNuevo.add(persona);
         return Mono.just(personasNuevo);
     };
+
 
     static Function<Persona, Mono<List<Persona>>> eliminarPersona = persona -> {
         List<Persona> personas = load();
@@ -102,18 +103,41 @@ public class ManipulacionFlujosBasico
         obtenerPersonasPorSigno.apply("Cáncer").subscribe(persona -> System.out.println(persona.getNombre()));
 
         System.out.println("Persona por telefono");
-        obtenerPersonasPorTelefono.apply("123456789").subscribe(persona -> System.out.println(persona.getNombre()));
+        obtenerPersonasPorTelefono.apply("123456789")
+                .subscribe(persona -> System.out.println(persona.getNombre()),
+                error -> System.out.println("Error al buscar persona"));
 
         System.out.println("Agregar persona");
 
-        agregarPersona
+        Persona nueva = new Persona("Luis", "González", "000000000", 50, "Aries");
+        Mono<List<Persona>> personaAddMono = Mono.just(personas).map(persona ->
+        {
+            List<Persona> personasNuevo = new ArrayList<>(personas);
+            personasNuevo.add(nueva);
+            return personasNuevo;
+        });
+        System.out.println("Agregar persona" + nueva);
+        personaAddMono.subscribe(lpersonas -> System.out.println("nueva lista add:" +lpersonas),
+                error -> System.out.println("Error al agregar persona"));
+        /*agregarPersona
                 .apply(new Persona("Luis", "González", "000000000", 50, "Aries"))
                         .subscribe(LSOutput -> System.out.println(LSOutput));
-        System.out.println("Eliminar persona");
+        System.out.println("Eliminar persona");*/
 
-        eliminarPersona
+        Persona borrar = new Persona("Pablo", "Muñoz", "554433221", 38, "Piscis");
+        Mono<List<Persona>> personaRemoveMono = Mono.just(personas).map(persona ->
+        {
+            List<Persona> personasNuevo = new ArrayList<>(personas);
+            personasNuevo.remove(nueva);
+            return personasNuevo;
+        });
+        System.out.println("Eliminar persona" + borrar);
+        personaRemoveMono.subscribe(
+                lpersonas -> System.out.println("nueva lista remove:" +lpersonas),
+                error -> System.out.println("Error al eliminar persona"));
+        /*eliminarPersona
                 .apply(new Persona("Pablo", "Muñoz", "554433221", 38, "Piscis"))
-                .subscribe(LSOutput -> System.out.println(LSOutput));
+                .subscribe(LSOutput -> System.out.println(LSOutput));*/
     }
 
 
