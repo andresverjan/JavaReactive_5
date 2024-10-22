@@ -92,8 +92,9 @@ public class DemoApplication {
 				.subscribe();
 
 		System.out.println("\n11. Eliminar persona " + "\n-------------------------");
-		deletePersona.apply(new Persona("Juan", "Perez", "123456789", 30, "Aries"))
-				.subscribe(persona -> System.out.println(persona.size()));
+		deletePersona(new Persona("Juan", "Perez", "123456789", 30, "Aries"))
+				.doOnNext(persona -> System.out.println("Persona eliminada: " + persona))
+				.subscribe();
 
 	}
 
@@ -141,10 +142,17 @@ public class DemoApplication {
 		return Mono.just(people);
 	};
 
-	static Function<Persona, Mono<List<Persona>>> deletePersona = persona -> {
+	public static Mono<Persona> deletePersona(Persona persona){
 		List<Persona> people = load();
-		people.remove(persona);
-		people.forEach(System.out::println);
-		return Mono.just(people);
-	};
+		return Mono.create(sink -> {
+			boolean removed = people.removeIf(p->p.getNombre().equals(persona.getNombre()));
+			people.forEach(System.out::println);
+			if(removed){
+				sink.success(persona);
+			}else{
+				sink.error(new RuntimeException("Persona no encontrada: " + persona.getNombre()));
+			}
+		});
+	}
 }
+
