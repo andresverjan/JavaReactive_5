@@ -2,18 +2,17 @@ package com.artifactory.flowBasic;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import reactor.core.Disposable;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @SpringBootApplication
 public class FlowBasicApplication {
 
-	private static Flux<List<Persona>> flux;
+	private static List<Persona> Personas = new ArrayList<Persona>();
+	private static Flux<Persona> flux;
 
 	private static Mono<List<Persona>> personaMono;
 
@@ -46,7 +45,6 @@ public class FlowBasicApplication {
 		Persona persona12 = new Persona("Rosa", "Jiménez", "998877665", 29, "Sagitario");
 
 
-		List<Persona> Personas = new ArrayList<Persona>();
 		Personas.add(persona1);
 		Personas.add(persona2);
 		Personas.add(persona3);
@@ -61,11 +59,14 @@ public class FlowBasicApplication {
 		Personas.add(persona12);
 
 		//#1
-		flux = Flux.just((Personas));
+		Flux<Persona> flux = Flux.fromIterable(Personas);
 		//#2
-		List<Persona> personas = (List<Persona>) Personas.stream()
-				.filter(persona -> persona.getEdad()> 30)
-				.collect(Collectors.toList());
+/*
+		flux.filter(persona -> persona.getEdad() > 30)
+				.map(Persona::getNombre)
+				.subscribe(p -> System.out.println("Persona " + p));
+*/
+
 		//personas.forEach(n-> print(n));
 		//#3
 		/*
@@ -78,74 +79,74 @@ public class FlowBasicApplication {
 						);
 		*/
 		//#4
-		//Mono<Persona> personaMono =  Mono.just(persona1);
-		//#5
-		//personaMono
-		//		.subscribe(p -> System.out.println("Persona1 : " + p.getNombre() + "*"+p.getApellido() ));
-
-		//#6
-		//flux.groupBy(p->p.stream().peek(per->System.out.println(per)));
-		/*flux.groupBy(p -> p.stream().collect(Collectors.groupingBy(Persona::getSigno)))
-				//.forEach(n-> print(n)));
-				.flatMap(group -> group
-						.collectList()
-						.map(lis -> Map.entry(group.key(), lis))
-
-				);
-
-		flux.subscribe(num -> System.out.println("completada" +num.stream().forEach(p->System.out.println(p.getApellido()))));
-*/
-
-
-				//.flatMap(grupo -> grupo.collectList().map(lists -> "Signo" ))
-				//.collect(Collectors.toList())
 /*
-		flux.subscribe(element -> System.out.println("persona: " +     element),
-						error -> System.err.println("Error: " + error.getMessage()),
-						() -> System.out.println("completada"));
+		Mono<Persona> personaMono =  Mono.just(persona1);
+		personaMono
+				.flatMap(persona -> Mono.just(persona.getNombre() + " " + persona.getApellido()))
+				.subscribe(p -> System.out.println("persona mono " + p));
 */
+		//#5
+		/*
+		personaMono.flatMap(persona -> Mono.just(persona.getNombre() + " " + persona.getApellido()))
+				.subscribe(p -> System.out.println("Persona1 : " + p ));
+*/
+		//#6
+		/*
+		flux.groupBy(Persona::getSigno)
+ 				.flatMap(grupo -> grupo
+				.collectList()
+				.doOnNext(personasPorSigno -> System.out.println("Signo: " + grupo.key() + ", Cantidad: "
+						+ personasPorSigno.size()))
+		)
+				.subscribe();
+*/
+
 		//#7
-		//Disposable resultado = obtenerPersonasPorEdad(38);
+		//Flux<Persona> resultado = obtenerPersonasPorEdad(38);
 		//#8
-		//Disposable resultadoSigno = obtenerPersonasPorSigno("Aries");
-		//resultado.isDisposed(n -> System.out.println());
+		//Flux<Persona> resultado =obtenerPersonasPorSigno("Aries");
 		//#9
-		//personaMono =  Mono.just(personas);
-		//Disposable resultadoTelefono = obtenerPersonaPorTelefono("554433221");
-
-
+		//obtenerPersonaPorTelefono("554433221").subscribe();
+		//#10
+		//agregarPersona(new Persona("Fernando", "Montaño", "23566898989", 20, "Libra")).subscribe();
+		//#11
+		eliminarPersona(personas.get(0)).subscribe();
 	}
 
-	public static void print(Persona persona){
-		System.out.println(persona.getNombre() + "-" +persona.getApellido() + "-" + persona.getEdad() + "-" + persona.getTelefono() + "-" + persona.getSigno());
-	}
 	//#7
-	public static Disposable obtenerPersonasPorEdad(int edad){
-		return flux.subscribe(p -> p.stream()
-				.filter(per -> per.getEdad() == edad)
-				.collect(Collectors.toList())
-				.stream()
-				.peek(pers->print(pers))
-				.map(per -> per.getNombre()+"#"+per.getApellido()+"#"+per.getEdad()+"#"+per.getTelefono()+"#"+per.getSigno())
-				.forEach(per ->System.out.println(per))
-		);
-	}
-	//#8
-	public static Disposable obtenerPersonasPorSigno(String signo){
-		return flux.subscribe(p -> p.stream()
-				.filter(per -> per.getSigno() == signo)
-				.collect(Collectors.toList())
-				.stream()
-				.peek(pers->print(pers))
-				.map(per -> per.getNombre()+"#"+per.getApellido()+"#"+per.getEdad()+"#"+per.getTelefono()+"#"+per.getSigno())
-				.forEach(per ->System.out.println(per))
-		);
 
+	public static Flux<Persona> obtenerPersonasPorEdad(int edad){
+		return  Flux.fromIterable(Personas)
+				.filter(per -> per.getEdad() == (edad))
+				.doOnNext(persona -> System.out.println("Nombre " + persona.getNombre()));
+
+	}
+
+
+	//#8
+	public static Flux<Persona> obtenerPersonasPorSigno(String signo){
+		return Flux.fromIterable(Personas)
+				.filter(per -> per.getSigno() == (signo))
+				.doOnNext(persona -> System.out.println("Nombre " + persona.getNombre()));
 	}
 	//#9
-	public static Disposable obtenerPersonaPorTelefono(String telefono){
+	public static Mono<Persona> obtenerPersonaPorTelefono(String telefono){
 		//mono
-		return personaMono.filter(p->p.contains(telefono)).subscribe();
+		return Flux.fromIterable(Personas)
+				.filter(p -> p.getTelefono().contains(telefono))
+				.next()
+				.doOnNext(persona -> System.out.println("Filtrando persona por teléfono: " + persona.getNombre()));
 	}
 
+	public static Mono<Persona> agregarPersona(Persona persona){
+		Personas.add(persona);
+		return Mono.just(persona)
+				.doOnNext(p -> System.out.println("Nombre agregada: " + p.getNombre()));
+	}
+
+	public static Mono<Persona> eliminarPersona(Persona persona){
+		Personas.remove(persona);
+		return Mono.just(persona)
+				.doOnNext(p -> System.out.println("Nombre Eliminado: " + p.getNombre()));
+	}
 }
