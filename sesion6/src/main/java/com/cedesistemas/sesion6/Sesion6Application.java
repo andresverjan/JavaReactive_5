@@ -6,6 +6,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.util.function.Tuple2;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -46,15 +47,15 @@ public class Sesion6Application {
         SpringApplication.run(Sesion6Application.class, args);
         fluxPersonas().subscribe(persona -> LOGGER.info("Persona: {}", persona));
         filtrarMayoresDe30();
-        mostrarNombresMayoresDe30();
-        monoPrimeraPersona();
-        mostrarNombreYApellido();
-        agruparPersonasPorSigno().subscribe();
-        obtenerPersonasPorEdad(30).subscribe();
-        obtenerPersonasPorSigno("Escorpio").subscribe();
-        obtenerPersonaPorTelefono("555444333").subscribe();
-        agregarPersona(new Persona("Luis", "Gómez", "123456789", 30, "Aries")).subscribe();
-        eliminarPersona(persona1).subscribe();
+//        mostrarNombresMayoresDe30();
+//        monoPrimeraPersona();
+//        mostrarNombreYApellido();
+//        agruparPersonasPorSigno().subscribe();
+//        obtenerPersonasPorEdad(30).subscribe();
+//        obtenerPersonasPorSigno("Escorpio").subscribe();
+//        obtenerPersonaPorTelefono("555444333").subscribe();
+//        agregarPersona(new Persona("Luis", "Gómez", "123456789", 30, "Aries")).subscribe();
+//        eliminarPersona(persona1).subscribe();
     }
 
     //1. Crear un Flux a partir de la lista de personas.
@@ -64,13 +65,31 @@ public class Sesion6Application {
 
     //2. Filtrar las personas mayores de 30 años utilizando filter().
     public static void filtrarMayoresDe30() {
-        var persons = fluxPersonas().filter(persona -> persona.getEdad() > 30);
+        var persons = fluxPersonas()
+                .switchIfEmpty(Flux.error(new RuntimeException("No hay personas mayores de 30 años")))
+                .map(persona -> {
+                    if (persona.getEdad() > 30) {
+                        return persona;
+                    } else {
+                        throw new RuntimeException("No hay personas mayores de 30 años");
+                    }
+                })
+                .filter(persona -> persona.getEdad() > 30);
         persons.subscribe(persona -> LOGGER.info("Persona mayor de 30 años: {}", persona));
     }
 
     //3. Mostrar los nombres de las personas mayores de 30 años utilizando map(), subscribe() y filter()
     public static void mostrarNombresMayoresDe30() {
-        var persons = fluxPersonas().filter(persona -> persona.getEdad() > 30).map(Persona::getNombre);
+        var persons = fluxPersonas()
+                .filter(persona -> persona.getEdad() > 30)
+                .map(persona -> {
+                    if (persona.getEdad() > 30) {
+                        return persona;
+                    } else {
+                        throw new RuntimeException("No hay personas mayores de 30 años");
+                    }
+                })
+                .map(Persona::getNombre);
         persons.subscribe(nombre -> LOGGER.info("Nombre de la persona mayor de 30 años: {}", nombre));
     }
 
@@ -140,5 +159,57 @@ public class Sesion6Application {
                 .doOnNext(persona1 -> arrayPersons.remove(persona1))
                 .doOnNext(persona1 -> LOGGER.info("Persona eliminada: {}", persona1))
                 .doOnNext(persona1 -> LOGGER.info("Arreglo con la persona eliminada: {}", arrayPersons));
+    }
+
+
+    public static void onReturnException() {
+        Flux<Integer> numbers = Flux.just(1, 2, 3).map(i -> {
+            if (i == 2) throw new RuntimeException("Error occurred on number2");
+            return i;
+        }).onErrorReturn(-1);
+        numbers.subscribe(value -> System.out.println("Received: " + value), error -> System.err.println("Error: " + error), () -> System.out.println("Completed!"));
+    }
+
+    public static void runTimeException() {
+        Flux<Integer> numbersFlux = Flux.just(1, 2, 3, 4, 5);
+        Flux<Integer> transformedFlux = numbersFlux.map(number -> {
+            if (number == 3) {
+                throw new RuntimeException("Encountered an error processing element: " + number);
+            }
+            return number * 2;
+        });
+        transformedFlux.doOnError(error -> {
+            System.err.println("An error occurred: " + error.getMessage());
+        }).subscribe(
+                System.out::println,
+                // Handle errors emitted by the Flux
+                error -> System.err.println("Error: " + error.getMessage())
+        );
+    }
+
+    public static void exampleMerge() {
+        Flux<String> flux1 = Flux.just("A", "B");
+        Flux<String> flux2 = Flux.just("C", "D");
+
+        Flux<String> merged = Flux.merge(flux1, flux2);
+        merged.subscribe(System.out::println); // Imprime: A B C D
+    }
+
+    public static void otherExampleMerge() {
+        Flux<String> names = Flux.just("Alice", "Bob");
+        Flux<Integer> ages = Flux.just(25, 30);
+
+        Flux<Tuple2<String, Integer>> combined = Flux.zip(names, ages);
+        combined.subscribe(tuple -> System.out.println(tuple.getT1() + " is " + tuple.getT2() + " years old."));
+    }
+
+    public static void exampleCombineLast() {
+        Flux<String> firstNames = Flux.just("John", "Jane");
+        Flux<String> lastNames = Flux.just("Doe", "Smith");
+
+        Flux<String> combined = Flux.combineLatest(firstNames, lastNames,
+                (firstName, lastName) -> firstName + " " + lastName);
+
+        combined.subscribe(System.out::println);
     }
 }
