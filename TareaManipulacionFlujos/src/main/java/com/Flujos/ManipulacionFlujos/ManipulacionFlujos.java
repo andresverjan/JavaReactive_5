@@ -5,8 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @SpringBootApplication
 public class ManipulacionFlujos {
@@ -17,11 +16,12 @@ public class ManipulacionFlujos {
 
 		SpringApplication.run(ManipulacionFlujos.class, args);
 
-		System.out.println("Filtro de personas mayores a 30 años con Flux");
+		System.out.println("Filtro de personas mayores a 60 años con Flux");
 		Flux<Persona> personaFlux = Flux.fromIterable(personas);
 
 		personaFlux
-				.filter(persona -> persona.getEdad() > 30)
+				.filter(persona -> persona.getEdad() > 60)
+				.switchIfEmpty(p -> System.out.println("No se encontraron personas mayores a: "+60))
 				.map(Persona::getNombre)
 				.subscribe(
 						nombre -> System.out.println("Persona mayor de 30 años: " + nombre),
@@ -33,6 +33,11 @@ public class ManipulacionFlujos {
 		Mono<Persona> primeraPersonaMono = Mono.just(personas.get(0));
 		primeraPersonaMono
 				.flatMap(persona -> Mono.just(persona.getNombre() + " " + persona.getApellido()))
+				.onErrorResume(error -> {
+					System.out.println("Error al obtener la primer persona: " +
+							error.getMessage());
+					return Mono.just(String.valueOf(0));
+					})
 				.subscribe(
 						nombreCompleto -> System.out.println("Primera persona: " + nombreCompleto),
 						error -> System.err.println("Error: " + error.getMessage()),
@@ -43,22 +48,31 @@ public class ManipulacionFlujos {
 				.groupBy(Persona::getSigno)
 				.flatMap(grupo -> grupo.collectList()
 						.doOnNext(personasPorSigno -> {
+							if ("Aries".equals(grupo.key())){
+								throw new RuntimeException("Error simulando el error para el signo Aries");
+							}
 							System.out.println("Signo: " + grupo.key());
 							System.out.println("Cantidad de personas: " + personasPorSigno.size());
 						}))
+				.onErrorResume(
+						error -> {
+							System.err.println("Error al procesar el grupo");
+							return Mono.just(Collections.emptyList());
+						}
+				)
 				.subscribe();
-		System.out.println("\nPersonas de 30 años:");
+		System.out.println("\nPersonas de 60 años:");
 
-		obtenerPersonasPorEdad(30).subscribe(persona ->
+		obtenerPersonasPorEdad(60).subscribe(persona ->
 				System.out.println("Elemento recibido: " + persona));
 
-		System.out.println("\nPersonas del signo 'Aries':");
-		obtenerPersonasPorSigno("Aries").subscribe(persona ->
+		System.out.println("\nPersonas del signo 'Aris':");
+		obtenerPersonasPorSigno("Aris").subscribe(persona ->
 				System.out.println("Elemento recibido: " + persona));
 
 		System.out.println("\nBuscando por telefono:");
 
-		String telefonoBuscado = "123456789";
+		String telefonoBuscado = "12345679";
 		obtenerPersonaPorTelefono(telefonoBuscado)
 				.doOnNext(persona -> System.out.println("Persona encontrada: " + persona))
 				.subscribe(
@@ -67,12 +81,12 @@ public class ManipulacionFlujos {
 				() -> System.out.println("No se encontró la persona.")
 		);
 
-		Persona nuevaPersona = new Persona("Lucía", "Torres", "333444555", 26, "Sagitario");
+		Persona nuevaPersona = new Persona("Error", "Torres", "333444555", 26, "Sagitario");
 		agregarPersona(nuevaPersona)
 				.doOnNext(persona -> System.out.println("Persona agregada: " + persona))
 				.subscribe();
 
-		eliminarPersona(nuevaPersona)
+		eliminarPersona(personas.get(0))
 				.doOnNext(persona -> System.out.println("Persona eliminada: " + persona))
 				.subscribe(
 						persona -> System.out.println("Elemento recibido: " + persona),
@@ -85,12 +99,18 @@ public class ManipulacionFlujos {
 	public static Flux<Persona> obtenerPersonasPorEdad(int edad) {
 		return Flux.fromIterable(getPersonas())
 				.filter(persona -> persona.getEdad() == edad)
+				.switchIfEmpty(
+					p -> System.out.println("No se encontraron personas con la edad: " + edad)
+				)
 				.doOnNext(persona -> System.out.println("Filtrando persona: " + persona));
 	}
 
 	public static Flux<Persona> obtenerPersonasPorSigno(String signo) {
 		return Flux.fromIterable(getPersonas())
-				.filter(persona -> persona.getSigno().equalsIgnoreCase(signo))
+				.filter(persona -> Objects.equals(persona.getSigno(), signo))
+				.switchIfEmpty(
+					p -> System.out.println("No se encontraron personas con el signo: "+ signo)
+				)
 				.doOnNext(persona -> System.out.println("Filtrando persona: " + persona));
 	}
 
@@ -98,23 +118,48 @@ public class ManipulacionFlujos {
 		return Flux.fromIterable(personas)
 				.filter(persona -> persona.getTelefono().equals(telefono))
 				.singleOrEmpty()
-				.doOnNext(persona -> System.out.println("Buscando persona: " + persona));
+				.doOnNext(persona -> System.out.println("Buscando persona: " + persona))
+				.switchIfEmpty(
+					Mono.fromRunnable(
+							()-> System.out.println("Persona no encontrada con el teléfono: " + telefono)
+					)
+				);
 	}
 
 	public static Mono<Persona> agregarPersona(Persona persona) {
-		personas.add(persona);
-		return Mono.just(persona)
-				.doOnNext(p -> System.out.println("Agregando persona: " + p));
+		return Mono.fromCallable(() -> {
+					// Simula un error si el nombre de la persona es "Error"
+					if ("Error".equals(persona.getNombre())) {
+						throw new RuntimeException("Error simulado al agregar persona");
+					}
+					personas.add(persona);
+					return persona;
+				})
+				.doOnNext(p -> System.out.println("Agregando persona: " + p))
+				.onErrorResume(error -> {
+					System.err.println("Error al agregar persona: " + error.getMessage());
+					return Mono.empty();
+				});
 	}
 
 	public static Mono<Persona> eliminarPersona(Persona persona) {
-		boolean removed = personas.remove(persona);
-		if (removed) {
-			return Mono.just(persona)
-					.doOnNext(p -> System.out.println("Eliminando persona: " + p));
-		} else {
-			return Mono.empty();
-		}
+		return Mono.fromCallable(() -> {
+					// Simula un error si el nombre de la persona es "Juan"
+					if ("Juan".equals(persona.getNombre())) {
+						throw new RuntimeException("Error simulado al eliminar persona con nombre Juan");
+					}
+					boolean removed = personas.remove(persona);
+					if (!removed) {
+						throw new RuntimeException("Persona no encontrada para eliminar");
+					}
+					return persona;
+				})
+				.doOnNext(p -> System.out.println("Eliminando persona: " + p))
+				.onErrorResume(error -> {
+					// Manejo del error
+					System.err.println("Error al eliminar persona: " + error.getMessage());
+					return Mono.empty();
+				});
 	}
 
 	private static List<Persona> getPersonas() {
