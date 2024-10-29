@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.R2DBC.UsingR2DBC.DataBaseTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2024-10-15T01:44:12" hostname="DESKTOP-RM5F04U" time="1.784">
+  <properties/>
+  <testcase name="testConnection()" classname="com.R2DBC.UsingR2DBC.DataBaseTest" time="1.784"/>
+  <system-out><![CDATA[20:44:09.041 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.R2DBC.UsingR2DBC.DataBaseTest]: DataBaseTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+20:44:09.241 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.R2DBC.UsingR2DBC.UsingR2DbcApplication for test class com.R2DBC.UsingR2DBC.DataBaseTest
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.3.4)
+
+2024-10-14T20:44:09.958-05:00  INFO 11116 --- [    Test worker] com.R2DBC.UsingR2DBC.DataBaseTest        : Starting DataBaseTest using Java 17.0.10 with PID 11116 (started by ASUS in C:\Users\ASUS\Desktop\Estudio\Java Reactivo\JavaReactive_5\UsingR2DBC)
+2024-10-14T20:44:09.961-05:00  INFO 11116 --- [    Test worker] com.R2DBC.UsingR2DBC.DataBaseTest        : No active profile set, falling back to 1 default profile: "default"
+2024-10-14T20:44:10.863-05:00  INFO 11116 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data R2DBC repositories in DEFAULT mode.
+2024-10-14T20:44:10.886-05:00  INFO 11116 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 16 ms. Found 0 R2DBC repository interfaces.
+2024-10-14T20:44:12.567-05:00  INFO 11116 --- [    Test worker] com.R2DBC.UsingR2DBC.DataBaseTest        : Started DataBaseTest in 3.023 seconds (process running for 4.866)
+Connection successful!
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
