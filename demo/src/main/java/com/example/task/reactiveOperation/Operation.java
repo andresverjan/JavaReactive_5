@@ -35,6 +35,7 @@ public class Operation {
     }
 
     //2 y 3. Filtrar las personas mayores de 30 años utilizando filter().
+    //switchIfEmpty proporciona un flujo alterno cuando el original esta vacio ... flux.just
     public void filterOver30(){
         createFluxPerson()
             .filter(person -> person.getEdad()>30)
