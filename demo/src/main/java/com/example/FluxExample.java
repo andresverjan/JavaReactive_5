@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example;
 
 import reactor.core.publisher.Flux;
 
