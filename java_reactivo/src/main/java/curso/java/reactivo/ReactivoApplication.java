@@ -41,6 +41,11 @@ public class ReactivoApplication {
 		System.out.println("--------------------------- PUNTO 2 ---------------------------");
 		personas
 				.filter(persona -> persona.edad() > 30)
+				.switchIfEmpty( empty -> new RuntimeException("No hay personas mayores de 30 años"))
+				.onErrorResume( error -> {
+					System.out.println("Error al filtrar personas mayores de 30 años : " + error.getMessage());
+					return Flux.empty();
+				})
 				.subscribe(System.out::println);
 
 
@@ -50,6 +55,11 @@ public class ReactivoApplication {
 		personas
 				.filter(persona -> persona.edad() > 30)
 				.map(Persona::nombre)
+				.switchIfEmpty( empty -> new RuntimeException("No hay personas mayores de 30 años"))
+				.onErrorResume( error -> {
+					System.out.println("Error al filtrar personas mayores de 30 años : " + error.getMessage());
+					return Flux.empty();
+				})
 				.subscribe(System.out::println);
 		//Crear un Mono con la primera persona de la lista.
 		System.out.println("--------------------------- PUNTO 4 ---------------------------");
@@ -77,17 +87,17 @@ public class ReactivoApplication {
 		obtenerPersonasPorEdad(personas, 30).subscribe(System.out::println);
 		//Crear una función obtenerPersonasPorSigno(String signo) que reciba un signo del zodiaco como parámetro y devuelva un Flux con las personas que tengan ese signo. (Hacer uso de peek)
 		System.out.println("--------------------------- PUNTO 8 ---------------------------");
-		obtenerPersonasPorSigno(personas, "Aries").subscribe(System.out::println);
+		obtenerPersonasPorSigno(personas, "Aries1").subscribe(System.out::println);
 		//Crear una función obtenerPersonaPorTelefono(String telefono) que reciba un número de teléfono como parámetro y devuelva un Mono con la persona que tenga ese número de teléfono. Si no se encuentra, devolver un Mono vacío. (Hacer uso de peek)
 		System.out.println("--------------------------- PUNTO 9 ---------------------------");
-		obtenerPersonaPorTelefono(personas, "12345678911").subscribe(System.out::println);
+		obtenerPersonaPorTelefono(personas, "1234567891qqqq1").subscribe(System.out::println);
 		//Crear una función agregarPersona(Persona persona) que reciba una persona como parámetro y la agregue a la lista de personas. Devolver un Mono con la persona agregada. (Hacer uso de peek)
-		System.out.println("--------------------------- PUNTO 10 ---------------------------");
-		Persona persona13 = new Persona("Rosa", "Jiménez", "998877665", 29, "Sagitario");
-		agregarPersonaLista(persona13).subscribe(System.out::println);
-		//Crear una función eliminarPersona(Persona persona) que reciba una persona como parámetro y la elimine de la lista de personas. Devolver un Mono con la persona eliminada.
-		System.out.println("--------------------------- PUNTO 11 ---------------------------");
-		eliminarPersona("998877665").subscribe(System.out::println);
+//		System.out.println("--------------------------- PUNTO 10 ---------------------------");
+//		Persona persona13 = new Persona("Rosa", "Jiménez", "998877665", 29, "Sagitario");
+//		agregarPersonaLista(persona13).subscribe(System.out::println);
+//		//Crear una función eliminarPersona(Persona persona) que reciba una persona como parámetro y la elimine de la lista de personas. Devolver un Mono con la persona eliminada.
+//		System.out.println("--------------------------- PUNTO 11 ---------------------------");
+//		eliminarPersona("998877665").subscribe(System.out::println);
 	}
 
 	public static Flux<Persona> obtenerPersonasPorEdad(Flux<Persona> persona, int edad) {
@@ -95,35 +105,44 @@ public class ReactivoApplication {
 	}
 
 	public static Flux<Persona> obtenerPersonasPorSigno(Flux<Persona> persona, String signo) {
-		return persona.filter(p -> p.signoZodiacal().equals(signo));
+		return persona.filter(p -> p.signoZodiacal().equals(signo))
+				.switchIfEmpty(Flux.error(new RuntimeException("No hay personas con el signo zodiacal: " + signo)))
+				.onErrorResume(error -> {
+					System.out.println("Error al filtrar personas por signo zodiacal: " + error.getMessage());
+					return Flux.empty();
+				});
 	}
 
 	public static Flux<Persona> obtenerPersonaPorTelefono(Flux<Persona> persona, String telefono) {
 		return persona.filter(p -> p.id()
 						.equals(telefono))
-				.switchIfEmpty(Mono.empty());
-	}
-
-	public static Mono<Persona> agregarPersonaLista(Persona personaAgregar){
-		return Mono.just(personaAgregar)
-				.map(persona -> {
-					listaPersonas.add(persona);
-					return persona;
+				.switchIfEmpty(Flux.error(new RuntimeException("No hay personas con el teléfono: " + telefono)))
+				.onErrorResume(error -> {
+					System.out.println("Error al filtrar personas por teléfono: " + error.getMessage());
+					return Flux.empty();
 				});
 	}
 
-	public static Mono<Persona> eliminarPersona( String idEliminar) {
-		return Mono.just(idEliminar)
-				.mapNotNull(id -> {
-					Persona personaEliminar = listaPersonas.stream()
-							.filter(p -> p.id().equals(id))
-							.findFirst()
-							.orElse(null);
-					if (personaEliminar != null) {
-						listaPersonas.remove(personaEliminar);
-					}
-					return personaEliminar;
-				});
-	}
+//	public static Mono<Persona> agregarPersonaLista(Persona personaAgregar){
+//		return Mono.just(personaAgregar)
+//				.map(persona -> {
+//					listaPersonas.add(persona);
+//					return persona;
+//				});
+//	}
+//
+//	public static Mono<Persona> eliminarPersona( String idEliminar) {
+//		return Mono.just(idEliminar)
+//				.mapNotNull(id -> {
+//					Persona personaEliminar = listaPersonas.stream()
+//							.filter(p -> p.id().equals(id))
+//							.findFirst()
+//							.orElse(null);
+//					if (personaEliminar != null) {
+//						listaPersonas.remove(personaEliminar);
+//					}
+//					return personaEliminar;
+//				});
+//	}
 
 }
