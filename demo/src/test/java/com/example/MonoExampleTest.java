@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example;
 
 import org.junit.jupiter.api.Test;
 import reactor.core.publisher.Mono;

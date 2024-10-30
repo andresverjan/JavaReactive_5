@@ -1,6 +1,6 @@
-package com.example.demo;
+package com.example.task.reactiveOperation;
 
-public class Persona {
+public class Person {
 
     private String nombre;
     private String apellido;
@@ -8,7 +8,7 @@ public class Persona {
     private int edad;
     private String signo;
 
-    public Persona(String nombre, String apellido, String telefono, int edad, String signo) {
+    public Person(String nombre, String apellido, String telefono, int edad, String signo) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.telefono = telefono;
