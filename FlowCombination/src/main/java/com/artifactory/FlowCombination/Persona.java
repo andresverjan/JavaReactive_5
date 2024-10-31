@@ -11,6 +11,10 @@ public class Persona {
 
     private String estado;
 
+    public Persona() {
+
+    }
+
     public String getEstado() {
         return estado;
     }
@@ -65,6 +69,9 @@ public class Persona {
 
     }
 
+    public void setSaldo(double saldo) {
+        this.saldo = saldo;
+    }
 
     @Override
 

@@ -1,8 +1,11 @@
 package com.artifactory.FlowCombination;
 
+import org.reactivestreams.Publisher;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import reactor.core.CoreSubscriber;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +15,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 @SpringBootApplication
 public class FlowCombinationApplication {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws InstantiationException, IllegalAccessException {
 		SpringApplication.run(FlowCombinationApplication.class, args);
 
 		String[] direccion1 = {"cl 200 # 56 -89"};
@@ -26,7 +29,7 @@ public class FlowCombinationApplication {
 		Persona persona2 = new Persona("Pablo", "Cali", direccion2, 900, "Active");
 		Persona persona3 = new Persona("Carlos", "Medellin", direccion3, 200, "Active");
 		Persona persona4 = new Persona("Felipe", "Bogota", direccion4, 8000, "Close");
-		Persona persona5 = new Persona("Rodrigo", "Pasto", direccion5, 300, "Close");
+		Persona persona5 = new Persona("Rodrigo", "Pasto", direccion5, -300, "Close");
 		Persona persona6 = new Persona("Luis", "Cartagena", direccion6, 100, "Active");
 
 		List<Persona> personaList  = new ArrayList<Persona>();
@@ -39,7 +42,7 @@ public class FlowCombinationApplication {
 
 		Flux<Persona> flux = Flux.fromIterable(personaList);
 /*
-	//#1
+	//1#1
 		flux
 				.map(p->p.getNombre().toLowerCase())
 				.flatMap(n -> Flux.fromArray(n.split("")))
@@ -47,7 +50,7 @@ public class FlowCombinationApplication {
 				.doOnNext(System.out::println)
 				.subscribe();
 
-	//#2
+	//1#2
 		flux.map(persona -> persona.getCiudad())
 				.filter(p->!p.contains("B"))
 				.distinct()
@@ -57,7 +60,7 @@ public class FlowCombinationApplication {
 
 
 
-		//#3
+		//1#3
 
 		flux.take(5)
 			.map(per-> {
@@ -66,22 +69,93 @@ public class FlowCombinationApplication {
 		.subscribe(System.out::println);
 
 
-		//#4
+		//1#4
 
         flux.map(per -> per.getSaldo())
                 .filter(p->p>1000).toStream()
 				.map(p->p.intValue() * 4688)
                 .reduce(Integer::sum)
                 .stream().forEach(System.out::println);
-*/
-        //#5
+
+        //1#5
         flux
                 .flatMap(p->Flux.fromArray(p.getDirecciones())
                         .map(r -> p.getEstado()+"<->" + p.getNombre()))
                 .subscribe(resultado->System.out.println(resultado));
 
+        //2#1
+        flux.map(i->{
+			if (i.getSaldo()<0){
+
+				throw new RuntimeException("Error Saldo negativo :");
+			}
+			return "Persona :" + i.getNombre() + " saldo :" + i.getSaldo();
+		})
+                .onErrorReturn("Saldo predeterminado 00000" )
+						.subscribe(System.out::println);
+
+		//2#2
+        flux.map(p -> {
+                    if (p.getSaldo() <0){
+						p.setSaldo(0);
+						throw new RuntimeException("Error :");
+                    }
+                    return "Saldo :" + p.getSaldo();
+                })
+                .onErrorResume(error-> {
+
+					return flux.map(i->i.getNombre() + " : Saldo 9999");
+				})
+                .subscribe(System.out::println);
 
 
+		//2#3
+		flux.flatMap(p -> {
+					if (p.getSaldo() <0){
+
+						throw new RuntimeException("Error : Nombre " +  p.getNombre() + " Ciudad " + p.getCiudad() + " Saldo :" + p.getSaldo());
+					}
+					return flux.just("Nombre " +  p.getNombre() + " Ciudad " + p.getCiudad() + " Saldo :" + p.getSaldo());
+				})
+				.doOnError(e->{
+					 e.getMessage();
+				})
+				.subscribe(System.out::println,
+						e ->System.err.print(e));
+
+
+
+
+		//2#4
+
+		flux.flatMap(p -> {
+					if (p.getSaldo() <0){
+
+						throw new RuntimeException("Error : Nombre " +  p.getNombre() + " Ciudad " + p.getCiudad() + " Saldo :" + p.getSaldo());
+					}
+					return flux.just("Nombre " +  p.getNombre() + " Ciudad " + p.getCiudad() + " Saldo :" + p.getSaldo());
+				})
+				.onErrorReturn("Saldo predeterminado 00000" )
+				.onErrorResume(error-> {
+
+					return flux.map(i->i.getNombre() + " : Saldo 9999");
+				})
+				.doOnError(e->System.err.print(e.getMessage()))
+				.subscribe(System.out::println,
+						e ->System.err.print(e));
+
+		//2#5
+		flux.flatMap(p -> {
+					if (p.getSaldo() <0){
+
+						throw new RuntimeException("Error : Nombre " +  p.getNombre() + " Ciudad " + p.getCiudad() + " Saldo :" + p.getSaldo());
+					}
+					return flux.just("Nombre " +  p.getNombre() + " Ciudad " + p.getCiudad() + " Saldo :" + p.getSaldo());
+				})
+				.onErrorContinue((e , p)->System.err.print(e) )
+				.subscribe(System.out::println,
+						e ->System.err.print(e));
+*/
 	}
 
 
