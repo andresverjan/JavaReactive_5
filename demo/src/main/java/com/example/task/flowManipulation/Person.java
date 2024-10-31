@@ -11,7 +11,7 @@ public class Person {
 
     private String name;
     private String city;
-    private String[] adresses; // Array de direcciones
+    private String[] addresses; // Array de direcciones
     private double balance;
 
     @Override
