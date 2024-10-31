@@ -1,7 +1,5 @@
 package com.cedesistemas.session7;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import reactor.core.publisher.Flux;
@@ -101,6 +99,22 @@ public class Session7Application {
         ejercicio21(personas);
         System.out.println("Ejercicio 2 Punto 2");
         ejercicio22(personas);
+        System.out.println("Ejercicio 3 Punto 2");
+        ejercicio23(personas);
+        System.out.println("Ejercicio 4 Punto 2");
+        ejercicio24(personas);
+        System.out.println("Ejercicio 5 Punto 2");
+        ejercicio25(personas);
+        System.out.println("Ejercicio 1 Punto 3");
+        ejercicio31(personas);
+        System.out.println("Ejercicio 2 Punto 3");
+        ejercicio32(personas);
+        System.out.println("Ejercicio 3 Punto 3");
+        ejercicio33(personas);
+        System.out.println("Ejercicio 4 Punto 3");
+        ejercicio34(personas);
+        System.out.println("Ejercicio 5 Punto 3");
+        ejercicio35(personas);
     }
     //1. Manipulación de Flujos de Datos
     // 1.Crea un flujo que contenga una lista de personas. Usa map para convertir sus nombres a mayúsculas y
@@ -188,6 +202,150 @@ public class Session7Application {
                     return persona;
                 })
                 .onErrorResume(error -> Flux.just(Persona.builder().nombre("Cliente afectado").saldo(0).build()))
+                .subscribe(persona -> System.out.println("Cliente: " + persona.getNombre() + " - Saldo: " + persona.getSaldo()));
+    }
+
+    /*
+    3. Implementa un flujo que registre el error cuando ocurra usando doOnError, incluyendo detalles sobre el cliente afectado.
+    */
+    static void ejercicio23(Flux<Persona> personas) {
+        personas
+                .map(persona -> {
+                    if (persona.getSaldo() < 0) {
+                        throw new RuntimeException("Saldo negativo");
+                    }
+                    return persona;
+                })
+                .doOnError(error -> System.out.println("Error en cliente: " + error.getMessage()))
+                .subscribe(persona -> System.out.println("Cliente: " + persona.getNombre() + " - Saldo: " + persona.getSaldo()));
+    }
+
+    /*
+    4. Crea un flujo que maneje diferentes tipos de excepciones con onErrorResume.
+    */
+    static void ejercicio24(Flux<Persona> personas) {
+        personas
+                .map(persona -> {
+                    if (persona.getSaldo() < 0) {
+                        throw new RuntimeException("Saldo negativo");
+                    }
+                    return persona;
+                })
+                .onErrorResume(error -> {
+                    if (error instanceof RuntimeException) {
+                        return Flux.just(Persona.builder().nombre("Cliente afectado").saldo(0).build());
+                    } else {
+                        return Flux.error(error);
+                    }
+                })
+                .subscribe(persona -> System.out.println("Cliente: " + persona.getNombre() + " - Saldo: " + persona.getSaldo()));
+    }
+
+    /*
+    Crea un flujo que continúe procesando a pesar de los errores usando onErrorContinue, registrando los errores encontrados.
+    */
+    static void ejercicio25(Flux<Persona> personas) {
+        personas
+                .map(persona -> {
+                    if (persona.getSaldo() < 0) {
+                        throw new RuntimeException("Saldo negativo");
+                    }
+                    return persona;
+                })
+                .onErrorContinue((error, persona) -> System.out.println("Error en cliente: " + persona.toString() + " - " + error.getMessage()))
+                .subscribe(persona -> System.out.println("Cliente: " + persona.getNombre() + " - Saldo: " + persona.getSaldo()));
+    }
+
+    /*
+    3. Combinación de Flujos de Datos
+    1. Combina dos flujos en uno solo sin importar el orden y muestra el nombre del cliente junto con su ciudad.
+    */
+    static void ejercicio31(Flux<Persona> personas) {
+        var personas2 = Flux.just(
+                Persona.builder().nombre("Juan").ciudad("Bogotá").build(),
+                Persona.builder().nombre("Pedro").ciudad("Medellín").build(),
+                Persona.builder().nombre("María").ciudad("Cali").build(),
+                Persona.builder().nombre("Luis").ciudad("Barranquilla").build(),
+                Persona.builder().nombre("Ana").ciudad("Cartagena").build(),
+                Persona.builder().nombre("Carlos").ciudad("Santa Marta").build(),
+                Persona.builder().nombre("Sofía").ciudad("Villavicencio").build(),
+                Persona.builder().nombre("Luisa").ciudad("Bogotá").build(),
+                Persona.builder().nombre("Harold").ciudad("Pereira").build()
+        );
+
+        personas.zipWith(personas2, (persona1, persona2) -> persona1.getNombre() + " - " + persona2.getCiudad())
+                .subscribe(result -> System.out.println("Cliente: " + result));
+    }
+
+    /*
+    2. Combina dos flujos emparejando sus elementos y muestra la suma del saldo total.
+     */
+    static void ejercicio32(Flux<Persona> personas) {
+        var personas2 = Flux.just(
+                Persona.builder().nombre("Juan").saldo(1000).build(),
+                Persona.builder().nombre("Pedro").saldo(500).build(),
+                Persona.builder().nombre("María").saldo(3000).build(),
+                Persona.builder().nombre("Luis").saldo(4000).build(),
+                Persona.builder().nombre("Ana").saldo(5000).build(),
+                Persona.builder().nombre("Carlos").saldo(6000).build(),
+                Persona.builder().nombre("Sofía").saldo(100).build(),
+                Persona.builder().nombre("Luisa").saldo(-5000).build(),
+                Persona.builder().nombre("Harold").saldo(-8000).build()
+        );
+
+        personas.zipWith(personas2, (persona1, persona2) -> persona1.getSaldo() + persona2.getSaldo())
+                .reduce((saldo1, saldo2) -> saldo1 + saldo2)
+                .subscribe(total -> System.out.println("Saldo total: " + total));
+    }
+
+    /*
+    3. Combina dos flujos tomando el último valor emitido por cada uno y muestra la ciudad junto con su respectivo estado.
+    */
+    static void ejercicio33(Flux<Persona> personas) {
+        var personas2 = Flux.just(
+                Persona.builder().ciudad("Bogotá").estadoCuenta("Activa").build(),
+                Persona.builder().ciudad("Medellín").estadoCuenta("Inactiva").build(),
+                Persona.builder().ciudad("Cali").estadoCuenta("Activa").build(),
+                Persona.builder().ciudad("Barranquilla").estadoCuenta("Inactiva").build(),
+                Persona.builder().ciudad("Cartagena").estadoCuenta("Activa").build(),
+                Persona.builder().ciudad("Santa Marta").estadoCuenta("Inactiva").build(),
+                Persona.builder().ciudad("Villavicencio").estadoCuenta("Activa").build(),
+                Persona.builder().ciudad("Bogotá").estadoCuenta("Activa").build(),
+                Persona.builder().ciudad("Pereira").estadoCuenta("Activa").build()
+        );
+
+        personas.zipWith(personas2, (persona1, persona2) -> persona1.getCiudad() + " - " + persona2.getEstadoCuenta())
+                .subscribe(result -> System.out.println("Ciudad: " + result));
+    }
+
+    /*
+    4.Concatenar dos flujos en uno solo manteniendo el orden e imprimiendo todos los nombres.
+     */
+    static void ejercicio34(Flux<Persona> personas) {
+        var personas2 = Flux.just(
+                Persona.builder().nombre("Juan").build(),
+                Persona.builder().nombre("Pedro").build(),
+                Persona.builder().nombre("María").build(),
+                Persona.builder().nombre("Luis").build(),
+                Persona.builder().nombre("Ana").build(),
+                Persona.builder().nombre("Carlos").build(),
+                Persona.builder().nombre("Sofía").build(),
+                Persona.builder().nombre("Luisa").build(),
+                Persona.builder().nombre("Harold").build()
+        );
+
+        personas.concatWith(personas2)
+                .map(Persona::getNombre)
+                .subscribe(result -> System.out.println("Nombre: " + result));
+    }
+
+    /*
+    5. Proporcionar un flujo alternativo si el original está vacío e imprime un mensaje personalizado.
+    */
+    static void ejercicio35(Flux<Persona> personas) {
+        personas
+                .filter(persona -> persona.getSaldo() > 0)
+                .switchIfEmpty(Flux.just(Persona.builder().nombre("Cliente afectado").saldo(0).build()))
                 .subscribe(persona -> System.out.println("Cliente: " + persona.getNombre() + " - Saldo: " + persona.getSaldo()));
     }
 }
