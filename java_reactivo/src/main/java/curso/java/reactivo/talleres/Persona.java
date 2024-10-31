@@ -1,4 +1,4 @@
-package curso.java.reactivo;
+package curso.java.reactivo.talleres;
 
 public record Persona(
         String nombre,

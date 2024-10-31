@@ -1,4 +1,4 @@
-package curso.java.reactivo;
+package curso.java.reactivo.talleres;
 
 import reactor.core.publisher.Flux;
 import reactor.util.function.Tuple2;

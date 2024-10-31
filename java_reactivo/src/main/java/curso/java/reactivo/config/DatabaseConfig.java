@@ -14,7 +14,7 @@ public class DatabaseConfig {
 
     @Bean
     public ConnectionFactory connectionFactory() {
-        return ConnectionFactories.get("r2dbc:postgresql://root:root@localhost:5500/java_reactivo");
+        return ConnectionFactories.get("r2dbc:postgresql://root:root@localhost:5500/java_reactivo?schema=schema_reactivo");
     }
     @Bean
     public CommandLineRunner testConnection(ConnectionFactory connectionFactory) {
