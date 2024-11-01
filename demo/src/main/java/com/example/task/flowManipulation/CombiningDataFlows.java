@@ -49,7 +49,7 @@ public class CombiningDataFlows {
     //Combina dos flujos en uno solo sin importar el orden y muestra el nombre del cliente junto con su ciudad.
     public void showName(){
         Flux<Person> fluxMerged = Flux.merge(createFluxPerson1(),createFluxPerson2());
-        fluxMerged.subscribe(p -> System.out.println("Nombre: " + p.getName()));
+        fluxMerged.subscribe(p -> System.out.println("Nombre: " + p.getName() + "| Ciudad: " + p.getCity()));
     }
 
     //2: Uso básico de zip

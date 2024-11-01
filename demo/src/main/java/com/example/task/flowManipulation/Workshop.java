@@ -47,7 +47,7 @@ public class Workshop {
         System.out.println("\n--------------- 5 - Ignorar errores con onErrorContinue ---------------");
         flowErrorManagement.ignoreError();
 
-        System.out.println("*************** 3 - Combinación de Flujos de Datos ***************");
+        System.out.println("\n\n*************** 3 - Combinación de Flujos de Datos ***************");
         CombiningDataFlows combiningDataFlows = new CombiningDataFlows();
 
         System.out.println("\n--------------- 1 - Uso básico de merge ---------------");
