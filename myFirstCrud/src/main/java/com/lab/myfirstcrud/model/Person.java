@@ -15,7 +15,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor // Genera un constructor por defecto
 @Data
-public class Person {
+public class Person{
 
     @Id
     private Long id;
@@ -30,7 +30,5 @@ public class Person {
     @Column("blood_type")
     private String bloodType;
 
-    public Person(long id, String johnDoe, int age) {
-    }
 }
 
