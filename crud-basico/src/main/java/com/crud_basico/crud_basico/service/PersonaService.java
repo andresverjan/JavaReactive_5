@@ -20,6 +20,7 @@ public class PersonaService {
 
     public Mono<Persona> findById(Long id) {
         return personaRepository.findById(id)
+                .doOnNext(persona -> System.out.println("Persona encontrada con id: " + persona))
                 .switchIfEmpty(Mono.error(new IllegalArgumentException("Persona no encontrada con id: " + id)));
     }
 
