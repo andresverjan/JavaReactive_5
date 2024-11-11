@@ -52,5 +52,12 @@ public class CombinationFlowsExample {
                 (firstName, lastName) -> firstName + " " + lastName);
 
         combined.subscribe(System.out::println);
+
+
+        System.out.println("\n************* COMBINATED LATEST*************");
+        Flux<String> ciudades = Flux.just("Medellin", "Bello");
+        Flux<String> barrios = Flux.just("Comunidad de Medellin", "Robledo?");
+        Flux.combineLatest(ciudades, barrios, (ciudad, barrio) -> ciudad + ", " + barrio)
+                .subscribe(combinado -> System.out.println("Combinación: " + combinado));
     }
 }
