@@ -10,13 +10,14 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @RestController
-@RequestMapping("/Persons")
+@RequestMapping("/Person")
 @AllArgsConstructor
 public class PersonController {
     private final PersonService personService;
-    private ConnectionFactory connectionFactory = ConnectionFactories.get("r2dbc:postgresql://postgres:eQr*5vk4omn;v2m@localhost/postgres");
+    private ConnectionFactory connectionFactory;
+    //private ConnectionFactory connectionFactory = ConnectionFactories.get("r2dbc:postgresql://postgres:eQr*5vk4omn;v2m@localhost/postgres?currentSchema=javaReactive");
 
-    @GetMapping("/getPersons")
+    @GetMapping()
     public Flux<Person> getPersons(){ return personService.getPerson(); }
 
     @GetMapping("/{id}")
@@ -28,8 +29,8 @@ public class PersonController {
     @PutMapping
     public Mono<Person> update(@RequestBody Person person){ return personService.update(person); }
 
-    @DeleteMapping("/{id}")
-    public Mono<Void> delete(@RequestBody Long id){ return personService.deletePersonById(id); }
+    @DeleteMapping()
+    public Mono<Void> delete(@RequestParam Long id){ return personService.deletePersonById(id); }
 
     @RequestMapping("/testConnection")
     public Mono<Void> testConnection() {
