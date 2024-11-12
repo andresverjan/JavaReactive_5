@@ -9,7 +9,10 @@ import static org.springframework.web.reactive.function.server.RouterFunctions.r
 
 @Configuration
 public class RouterConfig {
-
+/*
+Bean para generar los endpoint de cada una de las operaciones, y dirigirlos al handler
+quien enruta al servicio
+ */
     @Bean
     public RouterFunction<ServerResponse> routerFunction(PersonComponentHandler personComponentHandler) {
         return route()

@@ -10,6 +10,12 @@ import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+/*
+Clase que hace el puente entre el "controlador" y el servicio
+No debe tener mucha logica
+(Se puede entender como el Controller, donde haces llamados al servicio y
+mapeas respuestas exitosas y fallidas
+ */
 @Component
 @AllArgsConstructor
 public class PersonComponentHandler {
