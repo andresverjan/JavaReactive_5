@@ -21,4 +21,7 @@ public class Materia {
     private String nombre;
     @Column("nota")
     private Double nota;
+    @Column("estudiante")
+    private Double estudiante;
+
 }

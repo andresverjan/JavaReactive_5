@@ -9,13 +9,14 @@ import static org.springframework.web.reactive.function.server.RouterFunctions.r
 @Configuration
 public class RouterConfig {
     @Bean
-    public RouterFunction<ServerResponse> routes(PersonComponentHandler personComponentHandler) {
+    public RouterFunction<ServerResponse> routes(ComponentHandler componentHandler) {
     return route()
-            .GET("/person/", personComponentHandler::getPersons)
-            .GET("/person/{id}", personComponentHandler::getPersonById)
-            .POST("/person/", personComponentHandler::create)
-            .PUT("/person/", personComponentHandler::update)
-            .DELETE("/person/{id}", personComponentHandler::deletePersonByid)
+            .POST("/materia/", componentHandler::createMateria)
+            .GET("/person/", componentHandler::getPersons)
+            .GET("/person/{id}", componentHandler::getPersonById)
+            .POST("/person/", componentHandler::create)
+            .PUT("/person/", componentHandler::update)
+            .DELETE("/person/{id}", componentHandler::deletePersonByid)
             .build();
     }
 }

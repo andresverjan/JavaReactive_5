@@ -13,7 +13,6 @@ import reactor.core.publisher.Mono;
 public class EstudianteService {
     private final EstudianteRepository estudianteRepository;
 
-    private final MateriaRepository materiaRepository;
 
     public Flux<Estudiante> getEstudiante(){
         return estudianteRepository.findAll()
@@ -28,26 +27,5 @@ public class EstudianteService {
                 .doOnNext(estudiante -> System.out.println(" Data getPersonByid " + estudiante) );
     }
 
-    public Mono<Void> deleteEstudianteId(Long id){
-        if(id == null){
-            return Mono.empty();
-        }
-        return estudianteRepository.deleteById(id)
-                .doOnNext(p-> System.out.println("Borrado :: " + p))
-                .doOnError(e-> System.out.println(e));
-    }
 
-    public Mono<Estudiante> create(Estudiante estudiante){
-
-        return estudianteRepository.save(estudiante);
-    }
-
-    public Mono<Estudiante> update(Estudiante estudiante){
-
-        if(estudiante.getId() == null)
-        {
-            return Mono.error(new IllegalArgumentException(" Id Cannot be null"));
-        }
-        return estudianteRepository.save(estudiante);
-    }
 }
