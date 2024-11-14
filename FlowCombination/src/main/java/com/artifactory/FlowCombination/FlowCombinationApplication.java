@@ -41,7 +41,7 @@ public class FlowCombinationApplication {
         personaList.add(persona5);
         personaList.add(persona6);
 
-        Flux<Persona> flux = Flux.fromIterable(personaList);
+  /*      Flux<Persona> flux = Flux.fromIterable(personaList);
 
         //1#1
         flux
@@ -184,6 +184,10 @@ public class FlowCombinationApplication {
         names.filter(name -> name.startsWith("D"))
                 .switchIfEmpty(Flux.error(new RuntimeException("No names available")))
                 .subscribe(System.out::println);
+*/
+
+        Flux<String> ciudades = Flux.just("Medellin", "Bello");Flux<String> barrios = Flux.just("Comunidad de Medellin", "Robledo?");Flux.combineLatest(ciudades, barrios, (ciudad, barrio) -> ciudad + ", " + barrio).subscribe(combinado -> System.out.println("Combinación: " + combinado));
+
 
 
     }
