@@ -12,6 +12,9 @@ public class RouterConfig {
     public RouterFunction<ServerResponse> routes(ComponentHandler componentHandler) {
     return route()
             .POST("/materia/", componentHandler::createMateria)
+            .GET("/estudianteAprobados/", componentHandler::getEstudianteAprobados)
+            .GET("/estudianteReprobados/", componentHandler::getEstudianteReprobados)
+            .GET("/estudiantes/", componentHandler::getEstudiante)
             .GET("/person/", componentHandler::getPersons)
             .GET("/person/{id}", componentHandler::getPersonById)
             .POST("/person/", componentHandler::create)

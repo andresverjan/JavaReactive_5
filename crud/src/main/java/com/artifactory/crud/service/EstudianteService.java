@@ -1,6 +1,7 @@
 package com.artifactory.crud.service;
 
 import com.artifactory.crud.model.Estudiante;
+import com.artifactory.crud.model.EstudianteNota;
 import com.artifactory.crud.model.Person;
 import com.artifactory.crud.repository.EstudianteRepository;
 import com.artifactory.crud.repository.MateriaRepository;
@@ -14,18 +15,35 @@ public class EstudianteService {
     private final EstudianteRepository estudianteRepository;
 
 
-    public Flux<Estudiante> getEstudiante(){
-        return estudianteRepository.findAll()
-                .doOnNext(estudiante -> System.out.println(" Data " + estudiante) );
+    public Flux<EstudianteNota> getEstudianteAprobados(){
+        return estudianteRepository.findEstudentsAprobados()
+                .doOnNext(estudiante -> System.out.println(" Data " + estudiante) )
+                .onErrorResume(e-> {
+                            System.out.println("Error: " + e.getMessage());
+                            return Flux.empty();
+                        }
+                );
     }
 
-    public Mono<Estudiante> getEstudianteId(Long id) {
-        if(id == null){
-            return Mono.error(new IllegalArgumentException(" Id Cannot be null"));
-        }
-        return estudianteRepository.findById(id)
-                .doOnNext(estudiante -> System.out.println(" Data getPersonByid " + estudiante) );
+    public Flux<EstudianteNota> getEstudianteReprobados(){
+        return estudianteRepository.findEstudentsReprobados()
+                .doOnNext(estudiante -> System.out.println(" Data " + estudiante) )
+                .onErrorResume(e-> {
+                            System.out.println("Error: " + e.getMessage());
+                            return Flux.empty();
+                        }
+                );
     }
+    public Flux<Estudiante> getEstudiante(){
+        return estudianteRepository.findAll()
+                .doOnNext(estudiante -> System.out.println(" Data " + estudiante) )
+                .onErrorResume(e-> {
+                            System.out.println("Error: " + e.getMessage());
+                            return Flux.empty();
+                        }
+                );
+    }
+
 
 
 }

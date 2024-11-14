@@ -19,8 +19,8 @@ public class Estudiante {
     private Long id;
     @Column("nombre")
     private String nombre;
-    @Column("nombre")
+    @Column("edad")
     private int edad;
-    @Column("nombre")
+    @Column("materias")
     private List<Materia> materias;
 }
