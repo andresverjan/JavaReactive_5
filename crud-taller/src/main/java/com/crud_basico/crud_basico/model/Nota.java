@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
 @Table("notas")
@@ -17,4 +18,6 @@ public class Nota {
     @Id
     private Long id;
     private Double valor;
+    @Column("materia_id")
+    private Long materiaId;
 }

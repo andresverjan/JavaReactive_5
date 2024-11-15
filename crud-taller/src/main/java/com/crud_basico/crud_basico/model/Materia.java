@@ -19,7 +19,6 @@ public class Materia {
     @Id
     private Long id;
     private String nombre;
-    private List<Nota> notas;
     @Column("estudiante_id")
     private Long estudianteId;
 }

@@ -3,6 +3,7 @@ package com.crud_basico.crud_basico.service;
 import com.crud_basico.crud_basico.model.Estudiante;
 import com.crud_basico.crud_basico.repository.EstudianteRepository;
 import com.crud_basico.crud_basico.repository.MateriaRepository;
+import com.crud_basico.crud_basico.repository.NotaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
@@ -16,6 +17,7 @@ public class EstudianteService {
 
     private final EstudianteRepository estudianteRepository;
     private final MateriaRepository materiaRepository;
+    private final NotaRepository notaRepository;
 
     public Flux<Estudiante> findAll() {
         return estudianteRepository.findAll()
@@ -41,25 +43,30 @@ public class EstudianteService {
                 .doOnNext(persona -> System.out.println("Estudiante eliminado con id: "+ persona));
     }
 
+    public Flux<Materia> findMateriasByEstudianteId(Long estudianteId) {
+        return materiaRepository.findMateriasByEstudianteId(estudianteId);
+    }
+
     public Flux<Estudiante> reporteAprobados() {
         return findAll()
-                .filter(estudiante -> estudiante.getMaterias().stream()
-                        .flatMap(materia -> materia.getNotas().stream())
-                        .mapToDouble(Nota::getValor)
-                        .average()
-                        .orElse(0) > 3);
+                .filterWhen(estudiante -> calcularPromedio(estudiante.getId())
+                        .map(promedio -> promedio > 3));
     }
 
     public Flux<Estudiante> reporteReprobados() {
         return findAll()
-                .filter(estudiante -> estudiante.getMaterias().stream()
-                        .flatMap(materia -> materia.getNotas().stream())
-                        .mapToDouble(Nota::getValor)
-                        .average()
-                        .orElse(0) <= 3);
+                .filterWhen(estudiante -> calcularPromedio(estudiante.getId())
+                        .map(promedio -> promedio <= 3));
     }
 
-    public Flux<Materia> findMateriasByEstudianteId(Long estudianteId) {
-        return materiaRepository.findByEstudianteId(estudianteId);
+    private Mono<Double> calcularPromedio(Long estudianteId) {
+        return findMateriasByEstudianteId(estudianteId)
+                .flatMap(materia -> notaRepository.findNotasByMateriaId(materia.getId()))
+                .map(Nota::getValor)
+                .collectList()
+                .map(notas -> notas.stream()
+                        .mapToDouble(Double::doubleValue)
+                        .average()
+                        .orElse(0));
     }
 }
