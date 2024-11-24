@@ -2,6 +2,7 @@ package cedesistemas.edu.co.actividadfinal.components;
 
 import cedesistemas.edu.co.actividadfinal.components.cart.CartComponentHandler;
 import cedesistemas.edu.co.actividadfinal.components.products.ProductsComponentHandler;
+import cedesistemas.edu.co.actividadfinal.components.suppliers.SuppliersComponentHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.reactive.function.server.RequestPredicates;
@@ -39,6 +40,20 @@ public class RouterConfig {
                                 .andRoute(RequestPredicates.GET("/get-all-products/{carritoId}"), handler::getAllProductsInCart)
                                 .andRoute(RequestPredicates.DELETE("/delete-all-products/{carritoId}"), handler::deleteAllProductsInCart)
                                 .andRoute(RequestPredicates.GET("/get-product-by-id/{id}"), handler::getProductInCartById)
+                );
+    }
+
+    @Bean
+    public RouterFunction<ServerResponse> routesSuppliers(SuppliersComponentHandler handler) {
+
+        return RouterFunctions
+                .nest(RequestPredicates.path("/router-suppliers"),
+                        RouterFunctions
+                                .route(RequestPredicates.GET("/get-all"), handler::getAllSuppliers)
+                                .andRoute(RequestPredicates.GET("/get-by-id/{id}"), handler::getSupplierById)
+                                .andRoute(RequestPredicates.POST("/save"), handler::saveSupplier)
+                                .andRoute(RequestPredicates.PUT("/update"), handler::updateSupplier)
+                                .andRoute(RequestPredicates.DELETE("/delete/{id}"), handler::deleteSupplier)
                 );
     }
 }
