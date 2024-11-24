@@ -2,6 +2,7 @@ package cedesistemas.edu.co.actividadfinal.components;
 
 import cedesistemas.edu.co.actividadfinal.components.cart.CartComponentHandler;
 import cedesistemas.edu.co.actividadfinal.components.products.ProductsComponentHandler;
+import cedesistemas.edu.co.actividadfinal.components.salesorderdetails.SalesOrdersDetailsComponentHandler;
 import cedesistemas.edu.co.actividadfinal.components.suppliers.SuppliersComponentHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -54,6 +55,18 @@ public class RouterConfig {
                                 .andRoute(RequestPredicates.POST("/save"), handler::saveSupplier)
                                 .andRoute(RequestPredicates.PUT("/update"), handler::updateSupplier)
                                 .andRoute(RequestPredicates.DELETE("/delete/{id}"), handler::deleteSupplier)
+                );
+    }
+
+    @Bean
+    public RouterFunction<ServerResponse> routesSalesOrders(SalesOrdersDetailsComponentHandler handler) {
+
+        return RouterFunctions
+                .nest(RequestPredicates.path("/router-sales-orders"),
+                        RouterFunctions
+                                .route(RequestPredicates.POST("/add-product"), handler::addProductToCart)
+                                .andRoute(RequestPredicates.DELETE("/delete-product/{id}"), handler::deleteProductFromCart)
+                                .andRoute(RequestPredicates.PUT("/update-product"), handler::updateProductInCart)
                 );
     }
 }
