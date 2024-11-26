@@ -2,6 +2,7 @@ package cedesistemas.edu.co.actividadfinal.components;
 
 import cedesistemas.edu.co.actividadfinal.components.cart.CartComponentHandler;
 import cedesistemas.edu.co.actividadfinal.components.products.ProductsComponentHandler;
+import cedesistemas.edu.co.actividadfinal.components.purchasesordersdetails.PurchaseOrderDetailsComponentHandler;
 import cedesistemas.edu.co.actividadfinal.components.salesorderdetails.SalesOrdersDetailsComponentHandler;
 import cedesistemas.edu.co.actividadfinal.components.suppliers.SuppliersComponentHandler;
 import org.springframework.context.annotation.Bean;
@@ -67,6 +68,19 @@ public class RouterConfig {
                                 .route(RequestPredicates.POST("/add-product"), handler::addProductToCart)
                                 .andRoute(RequestPredicates.DELETE("/delete-product/{id}"), handler::deleteProductFromCart)
                                 .andRoute(RequestPredicates.PUT("/update-product"), handler::updateProductInCart)
+                );
+    }
+
+    @Bean
+    public RouterFunction<ServerResponse> purchaseOrderDetailsRoutes(PurchaseOrderDetailsComponentHandler handler) {
+        return RouterFunctions
+                .nest(RequestPredicates.path("/router-purchase-order-details"),
+                        RouterFunctions
+                                .route(RequestPredicates.POST("/save"), handler::savePurchaseOrderDetails)
+                                .andRoute(RequestPredicates.GET("/get-all"), handler::getPurchaseOrderDetails)
+                                .andRoute(RequestPredicates.GET("/get-by-id/{id}"), handler::getPurchaseOrderDetailsById)
+                                .andRoute(RequestPredicates.PUT("/update"), handler::updatePurchaseOrderDetails)
+                                .andRoute(RequestPredicates.DELETE("/delete/{id}"), handler::deletePurchaseOrderDetails)
                 );
     }
 }

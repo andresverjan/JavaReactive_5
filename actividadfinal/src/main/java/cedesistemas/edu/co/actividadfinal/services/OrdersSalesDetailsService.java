@@ -2,7 +2,7 @@ package cedesistemas.edu.co.actividadfinal.services;
 
 import cedesistemas.edu.co.actividadfinal.interfaces.SalesOrdersDetailsServiceInterface;
 import cedesistemas.edu.co.actividadfinal.models.SalesOrdersDetails;
-import cedesistemas.edu.co.actividadfinal.repositories.CrudSaleOrderDetails;
+import cedesistemas.edu.co.actividadfinal.repositories.CrudSaleOrderDetailsRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
@@ -12,7 +12,7 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 public class OrdersSalesDetailsService implements SalesOrdersDetailsServiceInterface {
 
-    private final CrudSaleOrderDetails crudSaleOrderDetails;
+    private final CrudSaleOrderDetailsRepository crudSaleOrderDetails;
 
     @Override
     public Flux<SalesOrdersDetails> saveSalesOrderDetails(Flux<SalesOrdersDetails> salesOrdersDetails) {
