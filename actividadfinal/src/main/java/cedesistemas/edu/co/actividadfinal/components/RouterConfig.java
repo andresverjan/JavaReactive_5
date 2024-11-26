@@ -3,6 +3,7 @@ package cedesistemas.edu.co.actividadfinal.components;
 import cedesistemas.edu.co.actividadfinal.components.cart.CartComponentHandler;
 import cedesistemas.edu.co.actividadfinal.components.products.ProductsComponentHandler;
 import cedesistemas.edu.co.actividadfinal.components.purchasesordersdetails.PurchaseOrderDetailsComponentHandler;
+import cedesistemas.edu.co.actividadfinal.components.reports.ReportsComponentHandler;
 import cedesistemas.edu.co.actividadfinal.components.salesorderdetails.SalesOrdersDetailsComponentHandler;
 import cedesistemas.edu.co.actividadfinal.components.suppliers.SuppliersComponentHandler;
 import org.springframework.context.annotation.Bean;
@@ -81,6 +82,20 @@ public class RouterConfig {
                                 .andRoute(RequestPredicates.GET("/get-by-id/{id}"), handler::getPurchaseOrderDetailsById)
                                 .andRoute(RequestPredicates.PUT("/update"), handler::updatePurchaseOrderDetails)
                                 .andRoute(RequestPredicates.DELETE("/delete/{id}"), handler::deletePurchaseOrderDetails)
+                );
+    }
+
+    @Bean
+    public RouterFunction<ServerResponse> reportsRoutes(ReportsComponentHandler handler) {
+        return RouterFunctions
+                .nest(RequestPredicates.path("/router-reports"),
+                        RouterFunctions
+                                .route(RequestPredicates.GET("/get-report-purchase-details"), handler::getReportPurchaseDetails)
+                                .andRoute(RequestPredicates.GET("/get-report-sales-details"), handler::getReportSalesDetails)
+                                .andRoute(RequestPredicates.GET("/get-report-top-five"), handler::getReportTopFive)
+                                .andRoute(RequestPredicates.GET("/get-suppliers-by-id-and-dates"), handler::getSuppliersByIdAndDates)
+                                .andRoute(RequestPredicates.GET("/get-clients-by-id-and-dates"), handler::getClientsByIdAndDates)
+                                .andRoute(RequestPredicates.GET("/get-categories-by-name-and-dates"), handler::getCategoriesByNameAndDates)
                 );
     }
 }

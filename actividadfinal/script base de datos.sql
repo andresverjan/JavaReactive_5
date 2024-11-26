@@ -13,6 +13,7 @@ CREATE TABLE ecommerce_schema.Productos (
     descripcion TEXT,
     imageUrl VARCHAR(255),
     stock INT NOT NULL,
+	categoria VARCHAR(255) NOT NULL,
 	precio DECIMAL(10, 2) NOT NULL
 );
 
@@ -78,13 +79,13 @@ INSERT INTO ecommerce_schema.Proveedores (nombre, direccion, telefono, email) VA
 ('Proveedor 1', 'Calle 123, Ciudad, País', '123456789', 'proveedor1@example.com'),
 ('Proveedor 2', 'Avenida 456, Ciudad, País', '987654321', 'proveedor2@example.com');
 
-INSERT INTO ecommerce_schema.Productos (name, descripcion, imageUrl, stock, precio) VALUES
-('Producto 1', 'Descripción del producto 1', 'http://example.com/producto1.jpg', 100, 19.99),
-('Producto 2', 'Descripción del producto 2', 'http://example.com/producto2.jpg', 50, 29.99),
-('Producto 3', 'Descripción del producto 3', 'http://example.com/producto3.jpg', 75, 39.99),
-('Producto 4', 'Descripción del producto 4', 'http://example.com/producto4.jpg', 80, 49.99),
-('Producto 5', 'Descripción del producto 5', 'http://example.com/producto5.jpg', 60, 59.99),
-('Producto 6', 'Descripción del producto 6', 'http://example.com/producto6.jpg', 90, 69.99);
+INSERT INTO ecommerce_schema.Productos (name, descripcion, imageUrl, stock, precio, categoria) VALUES
+('Producto 1', 'Descripción del producto 1', 'http://example.com/producto1.jpg', 100, 19.99, 'Electrodomesticos'),
+('Producto 2', 'Descripción del producto 2', 'http://example.com/producto2.jpg', 50, 29.99, 'Alimentos'),
+('Producto 3', 'Descripción del producto 3', 'http://example.com/producto3.jpg', 75, 39.99, 'Sonido'),
+('Producto 4', 'Descripción del producto 4', 'http://example.com/producto4.jpg', 80, 49.99, 'Multimedia'),
+('Producto 5', 'Descripción del producto 5', 'http://example.com/producto5.jpg', 60, 59.99, 'Celulares'),
+('Producto 6', 'Descripción del producto 6', 'http://example.com/producto6.jpg', 90, 69.99, 'Electrodomesticos');
 
 INSERT INTO ecommerce_schema.Carrito (usuario_id, fecha_creacion) VALUES
 (1, '2024-11-24 10:00:00'),
