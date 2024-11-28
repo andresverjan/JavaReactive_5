@@ -8,6 +8,8 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
+import java.time.LocalDate;
+
 @Table( name = "ventas")
 @ToString
 @AllArgsConstructor
@@ -22,6 +24,8 @@ public class Venta {
     @Column("idcarrito")
     private Long idcarrito;
     @Column("totalventa")
-    private Long totalventa;
+    private Double totalventa;
+    @Column("fecha")
+    private LocalDate fecha;
 
 }

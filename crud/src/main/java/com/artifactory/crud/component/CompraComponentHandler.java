@@ -1,6 +1,5 @@
 package com.artifactory.crud.component;
 
-import com.artifactory.crud.model.Cliente;
 import com.artifactory.crud.model.Compra;
 import com.artifactory.crud.service.CompraService;
 import lombok.AllArgsConstructor;
@@ -18,6 +17,8 @@ import java.net.URI;
 public class CompraComponentHandler {
 
     private CompraService compraService;
+
+
 
     public Mono<ServerResponse> getCompras(ServerRequest request){
         Flux<Compra> compras = compraService.getCompra();
@@ -55,4 +56,6 @@ public class CompraComponentHandler {
                         .switchIfEmpty(ServerResponse.notFound().build()));
 
     }
+
+
 }

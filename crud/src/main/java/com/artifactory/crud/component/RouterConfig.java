@@ -2,8 +2,11 @@ package com.artifactory.crud.component;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.reactive.function.server.RequestPredicates;
 import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.ServerResponse;
+
+import javax.swing.plaf.PanelUI;
 
 import static org.springframework.web.reactive.function.server.RequestPredicates.*;
 import static org.springframework.web.reactive.function.server.RouterFunctions.route;
@@ -72,11 +75,12 @@ public class RouterConfig {
 
     @Bean
     public RouterFunction<ServerResponse> compraRoutes(CompraComponentHandler compraComponentHandler) {
-        return route(GET("/compras/"), compraComponentHandler::getCompras)
-                .andRoute(GET("/compras/{id}"), compraComponentHandler::getCompraById)
-                .andRoute(POST("/realizarCompra/"), compraComponentHandler::realizarCompra)
-                .andRoute(PUT("/actualizarCompras/"), compraComponentHandler::actualizarCompra)
-                .andRoute(DELETE("/compras/{id}"), compraComponentHandler::deleteCompraByid);
+        return route()
+                .GET("/compras/", compraComponentHandler::getCompras)
+                .GET("/compras/{id}", compraComponentHandler::getCompraById)
+                .POST("/realizarCompra/", compraComponentHandler::realizarCompra)
+                .PUT("/actualizarCompras/", compraComponentHandler::actualizarCompra)
+                .DELETE("/compras/{id}", compraComponentHandler::deleteCompraByid).build();
     }
 
     @Bean
@@ -95,8 +99,20 @@ public class RouterConfig {
                 .andRoute(GET("/listarVentas/"), ventaComponentHandler::getVentas)
                 .andRoute(PUT("/actualizarVenta/"), ventaComponentHandler::actualizarVenta)
                 .andRoute(DELETE("/borrarVenta/{id}"), ventaComponentHandler::deleteVentaByid);
+    }
 
+    @Bean
+    public RouterFunction<ServerResponse> ReporteCompra(ReporteCompraComponentHandler reporteCompraComponentHandler){
+        return route(GET("/Reportecompras/") ,reporteCompraComponentHandler::getReporteCompras)
+                .andRoute(GET("/ReportecomprasProveedor/") ,reporteCompraComponentHandler::getReporteCompraProveedor);
 
+    }
+    @Bean
+    public RouterFunction<ServerResponse> ReporteVenta(ReporteVentaComponentHandler reporteVentaComponentHandler){
+        return route(GET("/ReporteVentas/") ,reporteVentaComponentHandler::getReporteVenta)
+                .andRoute(GET("/ReporteTop5Ventas/") ,reporteVentaComponentHandler::getTop5ReporteVenta)
+                .andRoute(GET("/ReporteVentasClientes/") ,reporteVentaComponentHandler::getReporteVentaCliente)
+                .andRoute(GET("/ReporteVentasClientesCategoria/") ,reporteVentaComponentHandler::getReporteVentaCategoriaFecha);
 
     }
 }

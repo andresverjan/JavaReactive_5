@@ -7,9 +7,10 @@ import com.artifactory.crud.model.Person;
 import org.springframework.data.r2dbc.repository.Modifying;
 import org.springframework.data.r2dbc.repository.Query;
 import org.springframework.data.repository.reactive.ReactiveCrudRepository;
+import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
+@Repository
 public interface EstudianteRepository extends ReactiveCrudRepository<Estudiante, Long> {
 
     @Query(" Select e.id as id, e.nombre as nombre, e.edad as edad ,  '' as nota " +

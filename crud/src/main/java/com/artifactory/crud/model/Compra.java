@@ -8,9 +8,12 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
+import java.sql.Date;
+import java.time.LocalDate;
+
 @Table( name = "compra")
 @ToString
-@AllArgsConstructor
+//@AllArgsConstructor
 @NoArgsConstructor // Genera un constructor por defecto
 @Data
 public class Compra {
@@ -22,10 +25,18 @@ public class Compra {
     @Column("idproveedor")
     private Long idproveedor;
     @Column("fecha")
-    private String fecha;
+    private LocalDate fecha;
     @Column("cantidad")
     private int cantidad;
     @Column("estado")
     private boolean estado;
 
+    public Compra(Long idcompra, Long idproducto, Long idproveedor, LocalDate fecha, int cantidad, boolean estado) {
+        this.idcompra = idcompra;
+        this.idproducto = idproducto;
+        this.idproveedor = idproveedor;
+        this.fecha = fecha;
+        this.cantidad = cantidad;
+        this.estado = estado;
+    }
 }
