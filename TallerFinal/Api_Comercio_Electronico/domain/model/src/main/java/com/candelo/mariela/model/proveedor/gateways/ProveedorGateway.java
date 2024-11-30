@@ -3,7 +3,7 @@ package com.candelo.mariela.model.proveedor.gateways;
 import com.candelo.mariela.model.proveedor.Proveedor;
 import reactor.core.publisher.Mono;
 
-public interface ProveedorRepository {
+public interface ProveedorGateway {
 
     Mono<Proveedor> saveProveedor(Proveedor proveedor);
 

@@ -12,5 +12,10 @@ public interface ClienteRepository extends ReactiveCrudRepository<ClienteEntity,
             insert into cliente (id,nombre, correo, telefono, direccion, documento_type)
             values (:id, :nombre, :correo, :telefono, :direccion, :documento_type)        
     """)
-    Mono<ClienteEntity> saveCliente(@Param("id") Integer id, @Param("nombre") String nombre, @Param("correo") String correo, @Param("telefono") String telefono, @Param("direccion") String direccion, @Param("documento_type") String documento_type);
+    Mono<ClienteEntity> saveCliente(@Param("id") Integer id,
+                                    @Param("nombre") String nombre,
+                                    @Param("correo") String correo,
+                                    @Param("telefono") String telefono,
+                                    @Param("direccion") String direccion,
+                                    @Param("documento_type") String documento_type);
 }

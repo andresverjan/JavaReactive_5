@@ -1,4 +1,4 @@
-package com.candelo.mariela.model.venta;
+package com.candelo.mariela.model.item;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
@@ -13,10 +13,13 @@ import java.util.UUID;
 @NoArgsConstructor
 @Builder(toBuilder = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class Venta {
+public class Item {
 
     private UUID id;
-    private int clienteId;
+    private UUID carritoId;
+    private UUID productId;
+    private String name;
+    private int cantidad;
+    private double precioUnitario;
     private double total;
-    private String fecha;
 }
