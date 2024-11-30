@@ -22,6 +22,7 @@ public class Producto {
     private int precioUnitario;
     private int stock;
     private String categoria;
+    private String imagenUrl;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 

@@ -30,6 +30,9 @@ public class ProductoEntity {
         @Column("stock")
         private int stock;
 
+        @Column("imagen_url")
+        private String imagenUrl;
+
         @Column("categoria")
         private String categoria;
 

@@ -36,7 +36,8 @@ public class ProductoHandler {
 
     public Mono<ServerResponse> getProductoById(ServerRequest request) {
         return productoUseCase.getProductoById(UUID.fromString(request.pathVariable("id")))
-                .flatMap(producto -> ServerResponse.ok().bodyValue(producto));
+                .flatMap(producto -> ServerResponse.ok().bodyValue(producto))
+                .switchIfEmpty(ServerResponse.notFound().build());
     }
 
     public Mono<ServerResponse> getAllProductos(ServerRequest request) {

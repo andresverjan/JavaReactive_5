@@ -10,7 +10,7 @@ import static org.springframework.web.reactive.function.server.RouterFunctions.r
 @Configuration
 public class ProductoRouterRest {
     @Bean
-    public RouterFunction<ServerResponse> routerFunction(ProductoHandler handler) {
+    public RouterFunction<ServerResponse> ProductRouterFunction(ProductoHandler handler) {
         return route()
                 .GET("/productos", handler::getAllProductos)
                 .GET("/producto/{id}", handler::getProductoById)

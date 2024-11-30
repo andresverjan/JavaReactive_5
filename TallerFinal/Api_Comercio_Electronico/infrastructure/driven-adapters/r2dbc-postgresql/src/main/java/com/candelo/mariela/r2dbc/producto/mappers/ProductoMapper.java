@@ -17,6 +17,7 @@ public class ProductoMapper {
                 .descripcion(productoEntity.getDescripcion())
                 .precioUnitario(productoEntity.getPrecioUnitario())
                 .stock(productoEntity.getStock())
+                .imagenUrl(productoEntity.getImagenUrl())
                 .categoria(productoEntity.getCategoria())
                 .createdAt(productoEntity.getCreatedAt())
                 .updatedAt(productoEntity.getUpdatedAt())
@@ -30,6 +31,7 @@ public class ProductoMapper {
         entity.setDescripcion(producto.getDescripcion());
         entity.setPrecioUnitario(producto.getPrecioUnitario());
         entity.setStock(producto.getStock());
+        entity.setImagenUrl(producto.getImagenUrl());
         entity.setCategoria(producto.getCategoria());
         entity.setCreatedAt(LocalDateTime.now());
         entity.setUpdatedAt(LocalDateTime.now());
