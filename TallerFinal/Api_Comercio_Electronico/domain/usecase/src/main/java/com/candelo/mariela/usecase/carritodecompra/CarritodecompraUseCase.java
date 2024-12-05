@@ -13,7 +13,7 @@ public class CarritodecompraUseCase {
     private final CarritoDeCompraGateway carritodecompraGateway;
 
     public Mono<CarritoDeCompra> saveCarritoDeCompra(CarritoDeCompra carritoDeCompra) {
-        return carritodecompraGateway.saveCarritoDeCompra(carritoDeCompra);
+        return carritodecompraGateway.save(carritoDeCompra);
     }
 
     public Mono<Void> deleteCarritoDeCompraById(UUID id) {

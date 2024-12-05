@@ -7,7 +7,7 @@ import java.util.UUID;
 
 public interface CarritoDeCompraGateway {
 
-    Mono<CarritoDeCompra> saveCarritoDeCompra(CarritoDeCompra carritoDeCompra);
+    Mono<CarritoDeCompra> save(CarritoDeCompra carritoDeCompra);
 
     Mono<Void> deleteCarritoDeCompraById(UUID id);
 
