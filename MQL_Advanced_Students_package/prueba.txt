@@ -1,0 +1,27 @@
+Durante el Q3 se Implementó al 90% la API Insurance Product Sale, esta api nos permitirá la venta de seguros en los diferentes canales que se tengan configurados​.
+
+El backend cuenta con las siguientes capacidades:​
+
+recreación y transformación de objetos ​
+
+Ramificación de flujos dependientes en operadores lógicos​
+
+transformaciones y filtrado de arreglos​
+
+formateo de fechas​
+
+Fechas a numeros y strings​
+
+SubStrings​
+
+Comparación de datos​
+
+Validación de la respuesta de consumos.
+
+Cancelación de flujos y manejo de errores.
+
+También se Implementa el metodo de autenticación OAUTH 2.0 en el microservicio de adaptador de terceros​, para dar una nueva funcionalidad al adaptador de terceros y poder conectar con el aliado Cardif.
+
+Para poder manejar de manera segura la información de medios de pago de manera segura al Aliado, se Implementó la funcionalidad que permite desencriptar con KMS el medio de pago en el microservicio del adaptador de terceros​, brindamos una nueva funcionalidad y envimos al aliado la información en medio seguro.
+
+Yo como integrante de 
